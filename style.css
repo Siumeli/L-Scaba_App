@@ -70,8 +70,44 @@ body {
   transition: opacity 0.2s;
 }
 
-.profile-btn:hover {
-  opacity: 0.9;
+.lang-btn {
+  background: none;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* MODAL / ILMOITTAUTUMISLOMAKE */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.modal-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-card select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  margin-top: 5px;
 }
 
 /* 2. SIVUPALKKI */
@@ -87,7 +123,7 @@ body {
   transition: left 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Puskee footerin alas */
+  justify-content: space-between;
 }
 
 .sidebar.open {
@@ -149,7 +185,6 @@ body {
   transform: rotate(180deg);
 }
 
-/* Sivupalkin alareunan asetukset-nappi */
 .sidebar-footer {
   padding: 15px 20px;
   border-top: 1px solid #f0f0f0;
@@ -181,7 +216,6 @@ body {
   font-size: 18px;
 }
 
-/* Overlay taustalle */
 .overlay {
   position: fixed;
   top: 60px;
@@ -216,7 +250,18 @@ body {
   display: none !important;
 }
 
-/* Lomakkeet */
+/* Nappien lisätyylit */
+.btn:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed;
+}
+
+.btn-success {
+  background-color: #27ae60;
+  color: white;
+}
+
 h2 {
   margin-bottom: 20px;
   font-weight: 700;
@@ -248,11 +293,6 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.checkbox-group label {
-  margin-bottom: 0;
-  cursor: pointer;
 }
 
 .btn {
@@ -288,7 +328,7 @@ h2 {
   font-weight: 600;
 }
 
-/* 4. PROFIILI -OSIO */
+/* PROFIILI & KISAKORTTI */
 .profile-header {
   display: flex;
   justify-content: space-between;
@@ -315,6 +355,76 @@ h2 {
   margin-bottom: 20px;
 }
 
+.profile-kisa-card-expanded {
+  background: #ffffff;
+  border: 1px solid #e0e0e2;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.profile-kisa-img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+}
+
+.profile-kisa-body {
+  padding: 20px;
+}
+
+.profile-kisa-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #111;
+}
+
+.main-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.stat-mini-box {
+  background-color: #f4f4f6;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #555;
+}
+
+.stat-mini-box strong {
+  display: block;
+  font-size: 16px;
+  color: #111;
+  margin-top: 2px;
+}
+
+.details-list-box {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #cccccc;
+}
+
+.details-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f2;
+}
+
+.details-label {
+  color: #555558;
+}
+
+.details-value {
+  font-weight: 600;
+  color: #111111;
+}
+
 .kisa-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -328,21 +438,7 @@ h2 {
   }
 }
 
-.kisa-status {
-  background-color: #ffffff;
-  padding: 15px;
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
-}
-
-.kisa-status h4 {
-  margin-bottom: 8px;
-  font-size: 15px;
-  border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 4px;
-}
-
-/* 3. ETUSIVU - Tyhjä tila turnaukselle */
+/* ETUSIVU - Tyhjä turnaus */
 .empty-tournament-container {
   display: flex;
   flex-direction: column;
@@ -359,18 +455,6 @@ h2 {
   font-size: 48px;
   margin-bottom: 15px;
   opacity: 0.7;
-}
-
-.empty-tournament-container h2 {
-  font-size: 22px;
-  color: #111111;
-  margin-bottom: 8px;
-}
-
-.empty-tournament-container p {
-  color: #666668;
-  font-size: 15px;
-  max-width: 400px;
 }
 
 /* Admin-taulukko */
