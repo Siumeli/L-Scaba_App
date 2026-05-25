@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LöScaba App</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-left">
+      <button id="menu-btn" class="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="logo" id="logo-home" style="cursor: pointer;">LöScaba</div>
+    </div>
+    <div class="nav-right">
+      <button id="profile-btn" class="profile-btn">Profiili</button>
+    </div>
+  </header>
+
+  <aside id="sidebar" class="sidebar">
+    <nav class="sidebar-menu">
+      <div class="dropdown">
+        <button class="dropdown-btn">Tietoa kisoista <span class="arrow">▼</span></button>
+        <div class="dropdown-content">
+          <a href="#">Pisteytys</a>
+          <a href="#">Lohkot</a>
+          <a href="#">Osallistumismaksu</a>
+          <a href="#">Sivuaktiviteetit</a>
+          <a href="#">Kentät</a>
+          <a href="#">Ruoka ja juoma tarjoilut</a>
+          <a href="#">Voittopalkinnot</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropdown-btn">Tietoa meistä <span class="arrow">▼</span></button>
+        <div class="dropdown-content">
+          <a href="#">Historia</a>
+          <a href="#">Järjestäjä</a>
+          <a href="#">Sponsorit</a>
+        </div>
+      </div>
+      <a href="#" class="sidebar-link">Yhteystiedot</a>
+    </nav>
+  </aside>
+
+  <div id="overlay" class="overlay"></div>
+
+  <main class="main-content">
+    
+    <section id="auth-section" class="card auth-card hidden">
+      <div id="login-box">
+        <h2>Kirjaudu sisään</h2>
+        <div class="form-group">
+          <label>Käyttäjätunnus (Sähköposti)</label>
+          <input type="email" id="login-email" placeholder="esim. kalle@email.com">
+        </div>
+        <div class="form-group">
+          <label>Salasana</label>
+          <input type="password" id="login-password" placeholder="******">
+        </div>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="remember-me">
+          <label for="remember-me">Muista sisäänkirjautuminen tässä laitteessa</label>
+        </div>
+        <button id="submit-login" class="btn btn-primary">Kirjaudu</button>
+        
+        <button id="google-login" class="btn btn-secondary" style="background-color: #df4a32; color: white; margin-top: 10px;">
+          Kirjaudu Google-tilillä
+        </button>
+
+        <p class="switch-form">Eikö tiliä? <a href="#" id="go-to-register">Luo tili tästä</a></p>
+      </div>
+
+      <div id="register-box" class="hidden">
+        <h2>Luo tili</h2>
+        <div class="form-group">
+          <label>Etunimi</label>
+          <input type="text" id="reg-firstname" placeholder="Kalle">
+        </div>
+        <div class="form-group">
+          <label>Sukunimi</label>
+          <input type="text" id="reg-lastname" placeholder="Pelaaja">
+        </div>
+        <div class="form-group">
+          <label>Sähköposti</label>
+          <input type="email" id="reg-email" placeholder="kalle@email.com">
+        </div>
+        <div class="form-group">
+          <label>Salasana</label>
+          <input type="password" id="reg-password" placeholder="******">
+        </div>
+        <button id="submit-register" class="btn btn-primary">Luo tili</button>
+        
+        <button id="google-register" class="btn btn-secondary" style="background-color: #df4a32; color: white; margin-top: 10px;">
+          Luo tili Google-tilillä
+        </button>
+
+        <p class="switch-form">Onko sinulla jo tili? <a href="#" id="go-to-login">Kirjaudu sisään</a></p>
+      </div>
+    </section>
+
+    <section id="profile-section" class="card profile-card hidden">
+      <div class="profile-header">
+        <h2 id="profile-name">Etunimi Sukunimi</h2>
+        <span id="role-badge" class="badge">User</span>
+      </div>
+      
+      <div class="kisa-info-box">
+        <h3>Viimeisin LöScaba kisasi</h3>
+        <p><strong>Kisa:</strong> LöScaba Kevät 2026</p>
+        
+        <div class="kisa-grid">
+          <div class="kisa-status">
+            <h4>Kaksinpeli (Singeli)</h4>
+            <p>Luokka: <span id="singeli-luokka">Harraste</span></p>
+            <p>Sijoitus: <span id="singeli-sijoitus">4. sija</span></p>
+          </div>
+          <div class="kisa-status">
+            <h4>Nelinpeli</h4>
+            <p>Osallistunut: <span id="nelinpeli-status">Kyllä</span></p>
+            <p>Sijoitus: <span id="nelinpeli-sijoitus">2. sija</span></p>
+          </div>
+        </div>
+      </div>
+
+      <button id="logout-btn" class="btn btn-secondary">Kirjaudu ulos</button>
+    </section>
+
+    <section id="admin-section" class="card admin-card hidden">
+      <h2>Admin Paneeli</h2>
+      <p>Hallitse käyttäjiä ja siirrä heitä ryhmien välillä.</p>
+      <div class="table-wrapper">
+        <table id="users-table">
+          <thead>
+            <tr>
+              <th>Nimi</th>
+              <th>Sähköposti</th>
+              <th>Rooli</th>
+              <th>Ryhmä</th>
+              <th>Toiminto</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <script src="app.js"></script>
+</body>
+</html>

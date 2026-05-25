@@ -1,0 +1,21 @@
+{
+  "short_name": "LöScaba",
+  "name": "LöScaba - Sulkapallokisat",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://via.placeholder.com/512",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "display": "standalone",
+  "orientation": "portrait"
+}
