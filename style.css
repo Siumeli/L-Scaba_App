@@ -8,10 +8,10 @@
 body {
   background-color: #f4f4f6;
   color: #111111;
-  padding-top: 60px; /* Tilaa navbarille */
+  padding-top: 60px;
 }
 
-/* Yläpalkki */
+/* 1. YLÄPALKKI */
 .navbar {
   position: fixed;
   top: 0;
@@ -37,9 +37,10 @@ body {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 1px;
+  cursor: pointer;
+  user-select: none;
 }
 
-/* Kolme viivaa (hampurilaisvalikko) */
 .menu-btn {
   background: none;
   border: none;
@@ -73,7 +74,7 @@ body {
   opacity: 0.9;
 }
 
-/* Sivupalkki */
+/* 2. SIVUPALKKI */
 .sidebar {
   position: fixed;
   top: 60px;
@@ -84,8 +85,9 @@ body {
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   z-index: 90;
   transition: left 0.3s ease;
-  overflow-y: auto;
-  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Puskee footerin alas */
 }
 
 .sidebar.open {
@@ -95,6 +97,9 @@ body {
 .sidebar-menu {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 0;
+  flex-grow: 1;
 }
 
 .sidebar-link, .dropdown-btn {
@@ -116,7 +121,6 @@ body {
   background-color: #f9f9f9;
 }
 
-/* Pudotusvalikot sivupalkissa */
 .dropdown-content {
   display: none;
   background-color: #f9f9f9;
@@ -135,10 +139,6 @@ body {
   font-size: 14px;
 }
 
-.dropdown-content a:hover {
-  color: #111111;
-}
-
 .arrow {
   float: right;
   font-size: 12px;
@@ -147,6 +147,38 @@ body {
 
 .dropdown.active .arrow {
   transform: rotate(180deg);
+}
+
+/* Sivupalkin alareunan asetukset-nappi */
+.sidebar-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #f0f0f0;
+  background-color: #ffffff;
+}
+
+.settings-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #444444;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.settings-btn:hover {
+  background-color: #f4f4f6;
+  color: #111111;
+}
+
+.settings-icon {
+  font-size: 18px;
 }
 
 /* Overlay taustalle */
@@ -165,14 +197,13 @@ body {
   display: block;
 }
 
-/* Pääsisältö */
+/* PÄÄSISÄLTÖ */
 .main-content {
   max-width: 800px;
   margin: 30px auto;
   padding: 0 20px;
 }
 
-/* Korttirakenteet */
 .card {
   background-color: #ffffff;
   border-radius: 12px;
@@ -244,7 +275,6 @@ h2 {
 .btn-secondary {
   background-color: #e4e4e6;
   color: #111111;
-  margin-top: 15px;
 }
 
 .switch-form {
@@ -258,7 +288,7 @@ h2 {
   font-weight: 600;
 }
 
-/* Profiilikortti */
+/* 4. PROFIILI -OSIO */
 .profile-header {
   display: flex;
   justify-content: space-between;
@@ -283,11 +313,6 @@ h2 {
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-}
-
-.kisa-info-box h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
 }
 
 .kisa-grid {
@@ -317,7 +342,38 @@ h2 {
   padding-bottom: 4px;
 }
 
-/* Admin osio */
+/* 3. ETUSIVU - Tyhjä tila turnaukselle */
+.empty-tournament-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px dashed #dcdce0;
+}
+
+.empty-tournament-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+  opacity: 0.7;
+}
+
+.empty-tournament-container h2 {
+  font-size: 22px;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.empty-tournament-container p {
+  color: #666668;
+  font-size: 15px;
+  max-width: 400px;
+}
+
+/* Admin-taulukko */
 .table-wrapper {
   overflow-x: auto;
   margin-top: 15px;

@@ -16,10 +16,10 @@
         <span></span>
         <span></span>
       </button>
-      <div class="logo" id="logo-home" style="cursor: pointer;">LöScaba</div>
+      <div class="logo" id="logo-home">LöScaba</div>
     </div>
     <div class="nav-right">
-      <button id="profile-btn" class="profile-btn">Profiili</button>
+      <button id="profile-btn" class="profile-btn">Kirjaudu</button>
     </div>
   </header>
 
@@ -47,13 +47,18 @@
       </div>
       <a href="#" class="sidebar-link">Yhteystiedot</a>
     </nav>
+    <div class="sidebar-footer">
+      <button id="settings-btn" class="settings-btn">
+        <span class="settings-icon">⚙</span> Asetukset
+      </button>
+    </div>
   </aside>
 
   <div id="overlay" class="overlay"></div>
 
   <main class="main-content">
-    
-    <section id="auth-section" class="card auth-card hidden">
+
+    <section id="auth-section" class="card hidden">
       <div id="login-box">
         <h2>Kirjaudu sisään</h2>
         <div class="form-group">
@@ -69,11 +74,9 @@
           <label for="remember-me">Muista sisäänkirjautuminen tässä laitteessa</label>
         </div>
         <button id="submit-login" class="btn btn-primary">Kirjaudu</button>
-        
         <button id="google-login" class="btn btn-secondary" style="background-color: #df4a32; color: white; margin-top: 10px;">
           Kirjaudu Google-tilillä
         </button>
-
         <p class="switch-form">Eikö tiliä? <a href="#" id="go-to-register">Luo tili tästä</a></p>
       </div>
 
@@ -96,58 +99,82 @@
           <input type="password" id="reg-password" placeholder="******">
         </div>
         <button id="submit-register" class="btn btn-primary">Luo tili</button>
-        
         <button id="google-register" class="btn btn-secondary" style="background-color: #df4a32; color: white; margin-top: 10px;">
           Luo tili Google-tilillä
         </button>
-
         <p class="switch-form">Onko sinulla jo tili? <a href="#" id="go-to-login">Kirjaudu sisään</a></p>
       </div>
     </section>
 
-    <section id="profile-section" class="card profile-card hidden">
-      <div class="profile-header">
-        <h2 id="profile-name">Etunimi Sukunimi</h2>
-        <span id="role-badge" class="badge">User</span>
-      </div>
-      
-      <div class="kisa-info-box">
-        <h3>Viimeisin LöScaba kisasi</h3>
-        <p><strong>Kisa:</strong> LöScaba Kevät 2026</p>
-        
-        <div class="kisa-grid">
-          <div class="kisa-status">
-            <h4>Kaksinpeli (Singeli)</h4>
-            <p>Luokka: <span id="singeli-luokka">Harraste</span></p>
-            <p>Sijoitus: <span id="singeli-sijoitus">4. sija</span></p>
-          </div>
-          <div class="kisa-status">
-            <h4>Nelinpeli</h4>
-            <p>Osallistunut: <span id="nelinpeli-status">Kyllä</span></p>
-            <p>Sijoitus: <span id="nelinpeli-sijoitus">2. sija</span></p>
-          </div>
+    <section id="home-section" class="view-section">
+      <div id="tournament-display">
         </div>
-      </div>
-
-      <button id="logout-btn" class="btn btn-secondary">Kirjaudu ulos</button>
     </section>
 
-    <section id="admin-section" class="card admin-card hidden">
-      <h2>Admin Paneeli</h2>
-      <p>Hallitse käyttäjiä ja siirrä heitä ryhmien välillä.</p>
-      <div class="table-wrapper">
-        <table id="users-table">
-          <thead>
-            <tr>
-              <th>Nimi</th>
-              <th>Sähköposti</th>
-              <th>Rooli</th>
-              <th>Ryhmä</th>
-              <th>Toiminto</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+    <section id="profile-section" class="view-section hidden">
+      <div class="card profile-card">
+        <div class="profile-header">
+          <h2 id="profile-name">Etunimi Sukunimi</h2>
+          <span id="role-badge" class="badge">User</span>
+        </div>
+        <div class="kisa-info-box">
+          </div>
+        <button id="logout-btn" class="btn btn-secondary">Kirjaudu ulos</button>
+      </div>
+
+      <div id="admin-panel" class="card hidden" style="margin-top: 25px;">
+        <h2>Admin Paneeli</h2>
+        
+        <div class="admin-sub-section" style="margin-bottom: 30px; padding-bottom: 25px; border-bottom: 2px solid #f0f0f0;">
+          <h3>Luo uusi turnaus</h3>
+          <div class="form-group" style="margin-top: 15px;">
+            <label>Turnauksen nimi</label>
+            <input type="text" id="tour-name" placeholder="esim. LöScaba Kesä 2026">
+          </div>
+          <div class="form-group">
+            <label>Kuva (Kuvan URL-osoite)</label>
+            <input type="text" id="tour-image" placeholder="https://esimerkki.fi/kuva.jpg">
+          </div>
+          <div class="form-group">
+            <label>Kuvaus</label>
+            <textarea id="tour-desc" placeholder="Kirjoita turnauksen esittely ja aikataulut tähän..." style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; font-size:15px; height:80px; font-family:inherit; resize: none;"></textarea>
+          </div>
+          <div class="kisa-grid">
+            <div class="form-group">
+              <label>Osallistumismaksu (Asiakkaat)</label>
+              <input type="text" id="tour-price-customer" placeholder="esim. 20€">
+            </div>
+            <div class="form-group">
+              <label>Osallistumismaksu (Jäsenet)</label>
+              <input type="text" id="tour-price-member" placeholder="esim. 15€">
+            </div>
+          </div>
+          <button id="submit-tournament" class="btn btn-primary" style="background-color: #222;">Julkaise turnaus etusivulle</button>
+        </div>
+
+        <h3>Käyttäjien hallinta</h3>
+        <p>Hallitse käyttäjiä ja siirrä heitä ryhmien välillä.</p>
+        <div class="table-wrapper">
+          <table id="users-table">
+            <thead>
+              <tr>
+                <th>Nimi</th>
+                <th>Sähköposti</th>
+                <th>Rooli</th>
+                <th>Ryhmä</th>
+                <th>Toiminto</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tournament-page-section" class="view-section hidden">
+      <div class="card">
+        <h2>Turnaussivu</h2>
+        <p style="color: #666; font-style: italic;">Tämä osio laajentaa turnauksen yksityiskohtia tulevaisuudessa.</p>
       </div>
     </section>
 
