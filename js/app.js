@@ -23,8 +23,6 @@ let currentLang = localStorage.getItem('loscaba_lang') || 'fi';
 function buildUIComponents() {
   const navPlaceholder = document.getElementById('navbar-placeholder');
   const sidePlaceholder = document.getElementById('sidebar-placeholder');
-  
-  // Nykyisen sivun tunnistus aktiivisen luokan asettamiseksi
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
   if (navPlaceholder) {
@@ -48,7 +46,6 @@ function buildUIComponents() {
         <div class="sidebar-brand">LöScaba Menu</div>
         <ul class="sidebar-menu">
           <li><a href="index.html" class="${currentPage === 'index.html' ? 'active' : ''}">Etusivu</a></li>
-          
           <li>
             <button class="dropdown-btn">Tietoa kisoista <span class="arrow">▼</span></button>
             <ul class="dropdown-container">
@@ -58,7 +55,6 @@ function buildUIComponents() {
               <li><a href="tietoa.html#oheistoiminta">Sivuaktiviteetit</a></li>
             </ul>
           </li>
-
           <li>
             <button class="dropdown-btn">Tietoa meistä <span class="arrow">▼</span></button>
             <ul class="dropdown-container">
@@ -68,11 +64,14 @@ function buildUIComponents() {
               <li><a href="tietoa.html#yhteystiedot">Yhteystiedot</a></li>
             </ul>
           </li>
-
           <li><a href="profiili.html" class="${currentPage === 'profiili.html' ? 'active' : ''}">Oma Profiili</a></li>
           <li id="menu-tour-item" class="hidden"><a href="turnaus.html" class="${currentPage === 'turnaus.html' ? 'active' : ''}">Turnaussivu 🏸</a></li>
           <li id="menu-admin-item" class="hidden"><a href="admin.html" class="${currentPage === 'admin.html' ? 'active' : ''}" style="color: #e74c3c; font-weight: bold;">Admin Paneeli</a></li>
           <li><a href="asetukset.html" class="${currentPage === 'asetukset.html' ? 'active' : ''}">Asetukset</a></li>
+          
+          <li id="pwa-install-item" class="hidden">
+            <a id="pwa-install-btn" style="background: var(--secondary-color); color: white; margin: 15px 20px; border-radius: 4px; text-align: center; border: none; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Asenna sovellus 📱</a>
+          </li>
         </ul>
       </div>
       <div id="overlay" class="overlay"></div>
@@ -80,6 +79,7 @@ function buildUIComponents() {
   }
 
   bindComponentEvents();
+  setupPWAInstallation(); // Kutsutaan PWA-logiikkaa heti kun UI on luotu
 }
 
 // 2. LIITETÄÄN TAPAHTUMANKUUNTELIJAT KOMPONENTTEIHIN
@@ -169,3 +169,55 @@ auth.onAuthStateChanged(user => {
 
 // Suoritetaan heti kun DOM on valmis
 document.addEventListener('DOMContentLoaded', buildUIComponents);
+
+// PWA ASENNUSLOGIIKKA
+let deferredPrompt;
+
+function setupPWAInstallation() {
+  const installItem = document.getElementById('menu-install-item') || document.getElementById('pwa-install-item');
+  const installBtn = document.getElementById('pwa-install-btn');
+
+  // Kuunnellaan selaimen asennusvalmiutta
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Estetään selaimen oma oletus-palkki
+    e.preventDefault();
+    // Otetaan tapahtuma talteen globaaliin muuttujaan
+    deferredPrompt = e;
+    
+    // Tuodaan asennusnappi näkyviin sivupalkkiin
+    if (installItem) {
+      installItem.classList.remove('hidden');
+    }
+  });
+
+  // Kun käyttäjä klikkaa asennusnappia sivupalkissa
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      
+      // Näytetään selaimen virallinen asennuskysely
+      deferredPrompt.prompt();
+      
+      // Odotetaan käyttäjän vastausta
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`Käyttäjän valinta: ${outcome}`);
+      
+      // Tyhjennetään prompti, sitä ei voi käyttää kahdesti
+      deferredPrompt = null;
+      
+      // Piilotetaan nappi, koska asennus alkoi/päättyi
+      if (installItem) {
+        installItem.classList.add('hidden');
+      }
+    });
+  }
+
+  // Jos sovellus on jo asennettu ja se avataan kuvakkeesta, piilotetaan nappi varmuuden vuoksi
+  window.addEventListener('appinstalled', () => {
+    console.log('LöScaba asennettu onnistuneesti!');
+    deferredPrompt = null;
+    if (installItem) {
+      installItem.classList.add('hidden');
+    }
+  });
+}
