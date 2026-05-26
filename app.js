@@ -31,7 +31,8 @@ const translations = {
     btn_join: "Ilmoittaudu kisaan mukaan", btn_waiting: "Odottaa järjestäjän hyväksyntää", btn_view_tour: "Näytä turnaus",
     modal_title: "Ilmoittautumistiedot", q_singles: "Haluatko osallistua singeliin (kaksinpeli)?", opt_yes: "Kyllä", opt_no: "Ei",
     q_class: "Mihin luokkaan haluat osallistua?", class_casual: "Hupi", class_inter: "Harraste", class_pro: "Kilpa",
-    q_doubles: "Haluatko osallistua neluriin (nelinpeli)?", btn_send_req: "Lähetä pyyntö", btn_cancel: "Peruuta", tour_page_title: "Turnaussivu"
+    q_doubles: "Haluatko osallistua neluriin (nelinpeli)?", btn_send_req: "Lähetä pyyntö", btn_cancel: "Peruuta", tour_page_title: "Turnaussivu",
+    btn_cancel_tour: "Peruuta nykyinen turnaus", label_darkmode: "Tumma tila (Dark Mode)", btn_save: "Tallenna"
   },
   en: {
     nav_login: "Login", menu_info: "Tournament Info", menu_scoring: "Scoring", menu_brackets: "Brackets",
@@ -49,7 +50,8 @@ const translations = {
     btn_join: "Join Tournament", btn_waiting: "Awaiting organizer approval", btn_view_tour: "View Tournament",
     modal_title: "Registration Details", q_singles: "Do you want to participate in singles?", opt_yes: "Yes", opt_no: "No",
     q_class: "Which class do you want to join?", class_casual: "Casual", class_inter: "Intermediate", class_pro: "Pro",
-    q_doubles: "Do you want to participate in doubles?", btn_send_req: "Send Request", btn_cancel: "Cancel", tour_page_title: "Tournament Page"
+    q_doubles: "Do you want to participate in doubles?", btn_send_req: "Send Request", btn_cancel: "Cancel", tour_page_title: "Tournament Page",
+    btn_cancel_tour: "Cancel active tournament", label_darkmode: "Dark Mode", btn_save: "Save"
   }
 };
 
@@ -82,6 +84,7 @@ const overlay = document.getElementById('overlay');
 const profileBtn = document.getElementById('profile-btn');
 const logoHome = document.getElementById('logo-home');
 const settingsBtn = document.getElementById('settings-btn');
+const settingsModal = document.getElementById('settings-modal');
 
 // Navigaatio-lohkot
 const homeSection = document.getElementById('home-section');
@@ -102,7 +105,7 @@ const joinDoubles = document.getElementById('join-doubles');
 // APPI-TILA
 let currentUser = null;
 let activeTournament = null;
-let userRegistrationStatus = null; // null, 'pending', 'approved'
+let userRegistrationStatus = null; 
 
 function showSection(targetSection) {
   homeSection.classList.add('hidden');
@@ -129,9 +132,47 @@ logoHome.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+// ASETUKSET - TOIMINNALLISUUS
 settingsBtn.addEventListener('click', () => {
-  alert("Asetukset-osio laajenee pian sovelluksen päivitysten myötä!");
+  if (!currentUser) {
+    alert(currentLang === 'fi' ? "Kirjaudu ensin sisään muokataksesi asetuksia!" : "Please login first to edit settings!");
+    toggleSidebar();
+    return;
+  }
+  document.getElementById('settings-fname').value = currentUser.firstname || '';
+  document.getElementById('settings-lname').value = currentUser.lastname || '';
+  document.getElementById('settings-darkmode').checked = document.body.classList.contains('dark-mode');
+  
+  settingsModal.classList.remove('hidden');
   toggleSidebar();
+});
+
+document.getElementById('close-settings-btn').addEventListener('click', () => settingsModal.classList.add('hidden'));
+
+document.getElementById('save-settings-btn').addEventListener('click', () => {
+  const firstname = document.getElementById('settings-fname').value.trim();
+  const lastname = document.getElementById('settings-lname').value.trim();
+  const darkMode = document.getElementById('settings-darkmode').checked;
+
+  if (!firstname || !lastname) return;
+
+  if (darkMode) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
+
+  db.collection("users").doc(currentUser.uid).update({
+    firstname,
+    lastname,
+    theme: darkMode ? 'dark' : 'light'
+  }).then(() => {
+    currentUser.firstname = firstname;
+    currentUser.lastname = lastname;
+    currentUser.theme = darkMode ? 'dark' : 'light';
+    updateUI();
+    settingsModal.classList.add('hidden');
+  }).catch(err => alert(err.message));
 });
 
 // SULJETAAN KIRJAUTUMISLAATIKKO JOS KLIKATAAN MUUALLE
@@ -167,7 +208,6 @@ profileBtn.addEventListener('click', () => {
   }
 });
 
-// KYSYMYSTEN DYNAMIIKKA (Piilotetaan luokka jos singeliä ei oteta)
 joinSingles.addEventListener('change', () => {
   if(joinSingles.value === 'ei') {
     document.getElementById('class-group').classList.add('hidden');
@@ -183,6 +223,11 @@ auth.onAuthStateChanged(user => {
       if (doc.exists) {
         currentUser = doc.data();
         currentUser.uid = user.uid;
+        if (currentUser.theme === 'dark') {
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.remove('dark-mode');
+        }
         checkUserRegistration();
       } else {
         handleMissingFirestoreDoc(user);
@@ -195,19 +240,16 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// REAALIAIKAINEN REKISTERÖINTISTATUKSEN TARKISTUS
 function checkUserRegistration() {
   if (!currentUser) return;
-  
   if (currentUser.role === 'admin') {
     userRegistrationStatus = 'approved';
     updateUI();
     return;
   }
-
   db.collection("tournaments").doc("active").collection("participants").doc(currentUser.uid).onSnapshot(doc => {
     if (doc.exists) {
-      userRegistrationStatus = doc.data().status; // 'pending' tai 'approved'
+      userRegistrationStatus = doc.data().status;
     } else {
       userRegistrationStatus = null;
     }
@@ -272,7 +314,6 @@ function updateUI() {
     document.getElementById('profile-name').innerText = `${currentUser.firstname} ${currentUser.lastname}`;
     document.getElementById('role-badge').innerText = currentUser.role.toUpperCase();
     
-    // Kisahistoriakortti dynaamisesti...
     const kisaBox = document.getElementById('profile-kisa-box');
     if (currentUser.viimeisinKisa) {
       kisaBox.innerHTML = `<div class="profile-kisa-card-expanded"><div class="profile-kisa-body"><div class="profile-kisa-title">${currentUser.viimeisinKisa}</div></div></div>`;
@@ -283,7 +324,7 @@ function updateUI() {
     if (currentUser.role === 'admin') {
       adminPanel.classList.remove('hidden');
       setupAdminListener();
-      setupRequestsListener(); // Kuunnellaan ilmoittautumisia
+      setupRequestsListener();
     } else {
       adminPanel.classList.add('hidden');
     }
@@ -296,15 +337,27 @@ function updateUI() {
 
 // TURNAUKSEN REAALIAIKAINEN KUUNTELU
 db.collection("tournaments").doc("active").onSnapshot(doc => {
+  const cancelBtn = document.getElementById('cancel-tournament-btn');
   if (doc.exists && doc.data().published) {
     activeTournament = doc.data();
+    if(cancelBtn) cancelBtn.classList.remove('hidden');
   } else {
     activeTournament = null;
+    if(cancelBtn) cancelBtn.classList.add('hidden');
   }
   renderTournamentDisplay();
 });
 
-// ETUSIVUN TURNAUSNÄKYMÄ (Dynaaminen painike)
+// PERUUTA TURNAUKSEN LUONTI (ADMIN)
+document.getElementById('cancel-tournament-btn').addEventListener('click', () => {
+  if(confirm(currentLang === 'fi' ? "Haluatko varmasti peruuttaa ja poistaa nykyisen turnauksen?" : "Are you sure you want to cancel and delete the active tournament?")) {
+    db.collection("tournaments").doc("active").delete().then(() => {
+      alert(currentLang === 'fi' ? "Turnaus peruutettu!" : "Tournament cancelled!");
+    });
+  }
+});
+
+// ETUSIVUN TURNAUSNÄKYMÄ
 function renderTournamentDisplay() {
   const displayContainer = document.getElementById('tournament-display');
   if (!activeTournament) {
@@ -319,10 +372,8 @@ function renderTournamentDisplay() {
 
   const name = currentLang === 'fi' ? activeTournament.nameFi : activeTournament.nameEn;
   const desc = currentLang === 'fi' ? activeTournament.descFi : activeTournament.descEn;
-  const isMember = currentUser && currentUser.group === 'jäsen';
 
   let actionButtonHtml = '';
-
   if (!currentUser) {
     actionButtonHtml = `<button class="btn btn-primary" onclick="openJoinFlow()">${translations[currentLang].btn_join}</button>`;
   } else if (userRegistrationStatus === 'approved') {
@@ -338,7 +389,7 @@ function renderTournamentDisplay() {
       <img src="${activeTournament.image}" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
       <h2>${name}</h2>
       <p style="margin: 10px 0 20px 0; color: #444; line-height: 1.5;">${desc}</p>
-      <div class="kisa-info-box" style="background-color: #f5f5f7;">
+      <div class="kisa-info-box">
         <p>Asiakkaat: ${activeTournament.priceCustomer}</p>
         <p>Jäsenet: ${activeTournament.priceMember}</p>
       </div>
@@ -347,7 +398,6 @@ function renderTournamentDisplay() {
   `;
 }
 
-// ILMOITTAUTUMISEN AVAUS
 window.openJoinFlow = function() {
   if (!currentUser) {
     profileBtn.click();
@@ -375,20 +425,76 @@ document.getElementById('confirm-join-btn').addEventListener('click', () => {
   });
 });
 
-// TURNAUSSIVUN AVAUS
+// TURNAUSSIVU & LOHKO/OTTELUKAAVIO SEURANTA
 window.openTournamentPage = function() {
   showSection(tournamentPageSection);
-  const content = document.getElementById('tournament-page-content');
-  const tName = currentLang === 'fi' ? activeTournament.nameFi : activeTournament.nameEn;
-  
-  content.innerHTML = `
-    <h2>${tName} - ${translations[currentLang].tour_page_title}</h2>
-    <p style="margin-top:10px; color:#555;">Tervetuloa kisaan! Tähän osioon ladataan jatkossa lohkot, otteluohjelmat ja reaaliaikaiset kenttätulokset.</p>
-    <button class="btn btn-secondary" onclick="showSection(homeSection)" style="margin-top:20px; max-width:200px;">Takaisin etusivulle</button>
-  `;
+  renderKaavioJaLohkot();
 };
 
-// KAKSIVIIPALEISEN TURNAUKSEN JULKAISU ADMINILTA
+function renderKaavioJaLohkot() {
+  const content = document.getElementById('tournament-page-content');
+  const tName = currentLang === 'fi' ? activeTournament.nameFi : activeTournament.nameEn;
+  const isAdmin = currentUser && currentUser.role === 'admin';
+
+  db.collection("tournaments").doc("active").collection("ottelut").doc("data").onSnapshot(doc => {
+    let otteluData = {
+      l1: { p1: "Pelaaja A", p2: "Pelaaja B", s1: 0, s2: 0 },
+      l2: { p1: "Pelaaja C", p2: "Pelaaja D", s1: 0, s2: 0 },
+      f1: { p1: "Lohko 1 Voittaja", p2: "Lohko 2 Voittaja", s1: 0, s2: 0 }
+    };
+
+    if (doc.exists) {
+      otteluData = doc.data();
+    } else if (isAdmin) {
+      db.collection("tournaments").doc("active").collection("ottelut").doc("data").set(otteluData);
+    }
+
+    content.innerHTML = `
+      <h2>${tName} - ${translations[currentLang].tour_page_title}</h2>
+      
+      <div class="kaavio-container">
+        <div class="lohko-box">
+          <h3>Alkulohkot (Lohko 1 & 2)</h3>
+          <div class="ottelu-rivi">
+            <span>${otteluData.l1.p1} vs ${otteluData.l1.p2}</span>
+            <div>
+              <input type="number" class="score-input" value="${otteluData.l1.s1}" ${!isAdmin ? 'disabled' : ''} onchange="paivitaTulos('l1', 's1', this.value)">
+              <input type="number" class="score-input" value="${otteluData.l1.s2}" ${!isAdmin ? 'disabled' : ''} onchange="paivitaTulos('l1', 's2', this.value)">
+            </div>
+          </div>
+          <div class="ottelu-rivi">
+            <span>${otteluData.l2.p1} vs ${otteluData.l2.p2}</span>
+            <div>
+              <input type="number" class="score-input" value="${otteluData.l2.s1}" ${!isAdmin ? 'disabled' : ''} onchange="paivitaTulos('l2', 's1', this.value)">
+              <input type="number" class="score-input" value="${otteluData.l2.s2}" ${!isAdmin ? 'disabled' : ''} onchange="paivitaTulos('l2', 's2', this.value)">
+            </div>
+          </div>
+        </div>
+
+        <div class="lohko-box">
+          <h3>Pudotuspelit (Finaalikaavio)</h3>
+          <div class="ottelu-rivi" style="background:#f1f1f1; font-weight:bold; border-radius:6px; padding:12px;">
+            <span>Finaali: ${otteluData.f1.p1} vs ${otteluData.f1.p2}</span>
+            <div>
+              <input type="number" class="score-input" value="${otteluData.f1.s1}" ${!isAdmin ? 'disabled' : ''} onchange="paivitaTulos('f1', 's1', this.value)">
+              <input type="number" class="score-input" value="${otteluData.f1.s2}" ${!isAdmin ? 'disabled' : ''} onchange="paivitaTulos('f1', 's2', this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" onclick="showSection(homeSection)" style="margin-top:20px; max-width:200px;">Takaisin etusivulle</button>
+    `;
+  });
+}
+
+window.paivitaTulos = function(otteluId, settiId, arvo) {
+  const dataUpdate = {};
+  dataUpdate[`${otteluId}.${settiId}`] = parseInt(arvo) || 0;
+  db.collection("tournaments").doc("active").collection("ottelut").doc("data").update(dataUpdate);
+};
+
+// TURNAUKSEN JULKAISU
 document.getElementById('submit-tournament').addEventListener('click', () => {
   const nameFi = document.getElementById('tour-name-fi').value.trim();
   const nameEn = document.getElementById('tour-name-en').value.trim();
@@ -399,7 +505,7 @@ document.getElementById('submit-tournament').addEventListener('click', () => {
   const priceMember = document.getElementById('tour-price-member').value.trim();
 
   if (!nameFi || !nameEn || !descFi || !descEn || !priceCustomer || !priceMember) {
-    alert("Täytä kaikki kentät molemmilla kielillä!");
+    alert("Täytä kaikki kentät!");
     return;
   }
 
@@ -410,7 +516,7 @@ document.getElementById('submit-tournament').addEventListener('click', () => {
   });
 });
 
-// ADMIN KUUNTELIJA - HAKEMUKSET (UUSI)
+// ADMIN KUUNTELIJA - HAKEMUKSET
 let requestsListenerUnsubscribe = null;
 function setupRequestsListener() {
   if (requestsListenerUnsubscribe) requestsListenerUnsubscribe();

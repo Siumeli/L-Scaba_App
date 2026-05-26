@@ -57,6 +57,28 @@
 
   <div id="overlay" class="overlay"></div>
 
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <h3 data-txt="menu_settings">Asetukset</h3>
+      <div class="form-group" style="margin-top:15px;">
+        <label data-txt="label_fname">Etunimi</label>
+        <input type="text" id="settings-fname">
+      </div>
+      <div class="form-group">
+        <label data-txt="label_lname">Sukunimi</label>
+        <input type="text" id="settings-lname">
+      </div>
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="settings-darkmode">
+        <label for="settings-darkmode" data-txt="label_darkmode">Tumma tila (Dark Mode)</label>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button id="save-settings-btn" class="btn btn-primary" data-txt="btn_save">Tallenna</button>
+        <button id="close-settings-btn" class="btn btn-secondary" data-txt="btn_cancel">Peruuta</button>
+      </div>
+    </div>
+  </div>
+
   <div id="join-modal" class="modal-overlay hidden">
     <div class="modal-card">
       <h3 data-txt="modal_title">Ilmoittautumistiedot</h3>
@@ -181,7 +203,10 @@
         </div>
 
         <div class="admin-sub-section" style="margin-bottom: 30px; padding-bottom: 25px; border-bottom: 2px solid #f0f0f0;">
-          <h3 data-txt="admin_create_title">Luo uusi turnaus</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 data-txt="admin_create_title">Luo uusi turnaus</h3>
+            <button id="cancel-tournament-btn" class="action-btn hidden" style="background-color:#c0392b; padding: 10px 15px;" data-txt="btn_cancel_tour">Peruuta nykyinen turnaus</button>
+          </div>
           
           <div class="kisa-grid" style="margin-top:15px;">
             <div class="form-group">
@@ -240,8 +265,7 @@
     </section>
 
     <section id="tournament-page-section" class="view-section hidden">
-      <div class="card" id="tournament-page-content">
-        </div>
+      <div class="card" id="tournament-page-content"></div>
     </section>
 
   </main>
@@ -251,5 +275,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <script src="app.js"></script>
+  <script src="Tournament.js"></script>
 </body>
 </html>
