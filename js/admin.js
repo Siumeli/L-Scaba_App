@@ -38,16 +38,33 @@ if (document.getElementById('adm-del-btn')) {
 function haeOdottavatPyyntojat() {
   db.collection("tournaments").doc("active").collection("participants").where("status", "==", "pending").onSnapshot(snap => {
     const tbody = document.querySelector('#adm-req-table tbody');
-    if (!tbody) return; tbody.innerHTML = '';
+    if (!tbody) return; 
+    tbody.innerHTML = '';
+    
     snap.forEach(doc => {
       const d = doc.data();
+      
+      // Muotoillaan singelin vastaus: jos kyllä, näytetään myös tasoluokka korostettuna
+      let singeliTeksti = "Ei";
+      if (d.singles === "kyllä" || d.singles === "Kyllä") {
+        const luokka = d.pClass ? d.pClass.toUpperCase() : "HUPI";
+        singeliTeksti = `Kyllä (<span class="badge">${luokka}</span>)`;
+      }
+
+      // Muotoillaan nelurin vastaus
+      let neluriTeksti = "Ei";
+      if (d.doubles === "kyllä" || d.doubles === "Kyllä") {
+        neluriTeksti = "Kyllä 🏸";
+      }
+
       tbody.innerHTML += `
         <tr>
-          <td>${d.name}</td>
-          <td>${d.pClass.toUpperCase()}</td>
+          <td style="font-weight: 600;">${d.name}</td>
+          <td>${singeliTeksti}</td>
+          <td>${neluriTeksti}</td>
           <td>
-            <button onclick="pAsetaStatus('${doc.id}','approved')" class="btn btn-primary" style="padding:4px 8px; background:#2ecc71;">Hyväksy</button>
-            <button onclick="pAsetaStatus('${doc.id}','rejected')" class="btn btn-secondary" style="padding:4px 8px; background:#e74c3c;">Hylkää</button>
+            <button onclick="pAsetaStatus('${doc.id}','approved')" class="btn btn-primary" style="padding:6px 10px; background:#2ecc71;">Hyväksy</button>
+            <button onclick="pAsetaStatus('${doc.id}','rejected')" class="btn btn-secondary" style="padding:6px 10px; background:#e74c3c;">Hylkää</button>
           </td>
         </tr>
       `;
