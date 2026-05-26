@@ -1,21 +1,13 @@
 {
   "short_name": "LöScaba",
-  "name": "LöScaba - Sulkapallokisat",
+  "name": "LöScaba Badminton Tournament",
   "icons": [
-    {
-      "src": "https://via.placeholder.com/192",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "https://via.placeholder.com/512",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
+    { "src": "https://via.placeholder.com/192", "type": "image/png", "sizes": "192x192" },
+    { "src": "https://via.placeholder.com/512", "type": "image/png", "sizes": "512x512" }
   ],
   "start_url": "./index.html",
   "background_color": "#ffffff",
-  "theme_color": "#111111",
+  "theme_color": "#3498db",
   "display": "standalone",
   "orientation": "portrait"
 }

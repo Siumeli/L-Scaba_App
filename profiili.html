@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LöScaba - Profiili</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+  <div id="sidebar-placeholder"></div>
+
+  <main class="main-content">
+    <section id="auth-section" class="card hidden">
+      <div id="login-box">
+        <h2>Kirjaudu sisään</h2>
+        <div class="form-group"><label>Sähköposti</label><input type="email" id="login-email"></div>
+        <div class="form-group"><label>Salasana</label><input type="password" id="login-password"></div>
+        <button id="submit-login" class="btn btn-primary" style="width:100%;">Kirjaudu</button>
+        <p style="margin-top:15px; text-align:center;">Eikö tiliä? <a href="#" id="go-to-register">Luo tili</a></p>
+      </div>
+
+      <div id="register-box" class="hidden">
+        <h2>Luo tili</h2>
+        <div class="form-group"><label>Etunimi</label><input type="text" id="reg-firstname"></div>
+        <div class="form-group"><label>Sukunimi</label><input type="text" id="reg-lastname"></div>
+        <div class="form-group"><label>Sähköposti</label><input type="email" id="reg-email"></div>
+        <div class="form-group"><label>Salasana</label><input type="password" id="reg-password"></div>
+        <button id="submit-register" class="btn btn-primary" style="width:100%;">Luo tili</button>
+        <p style="margin-top:15px; text-align:center;">Onko tiliä? <a href="#" id="go-to-login">Kirjaudu</a></p>
+      </div>
+    </section>
+
+    <section id="profile-section" class="card hidden">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h2 id="profile-name">Ladataan...</h2>
+        <span id="role-badge" class="badge">USER</span>
+      </div>
+      <p id="profile-email-view" style="margin-bottom:20px;"></p>
+      <button id="logout-btn" class="btn btn-secondary" style="width:100%;">Kirjaudu ulos</button>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/profiili.js"></script>
+</body>
+</html>

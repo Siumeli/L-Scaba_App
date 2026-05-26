@@ -3,278 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LöScaba App</title>
+  <title>LöScaba - Etusivu</title>
+  <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="navbar">
-    <div class="nav-left">
-      <button id="menu-btn" class="menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <div class="logo" id="logo-home">LöScaba</div>
-    </div>
-    <div class="nav-right" style="display: flex; align-items: center; gap: 15px;">
-      <button id="lang-btn" class="lang-btn">EN</button>
-      <button id="profile-btn" class="profile-btn" data-txt="nav_login">Kirjaudu</button>
-    </div>
-  </header>
-
-  <aside id="sidebar" class="sidebar">
-    <nav class="sidebar-menu">
-      <div class="dropdown">
-        <button class="dropdown-btn"><span data-txt="menu_info">Tietoa kisoista</span> <span class="arrow">▼</span></button>
-        <div class="dropdown-content">
-          <a href="#" data-txt="menu_scoring">Pisteytys</a>
-          <a href="#" data-txt="menu_brackets">Lohkot</a>
-          <a href="#" data-txt="menu_fee">Osallistumismaksu</a>
-          <a href="#" data-txt="menu_side_act">Sivuaktiviteetit</a>
-          <a href="#" data-txt="menu_courts">Kentät</a>
-          <a href="#" data-txt="menu_catering">Ruoka ja juoma tarjoilut</a>
-          <a href="#" data-txt="menu_prizes">Voittopalkinnot</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropdown-btn"><span data-txt="menu_about">Tietoa meistä</span> <span class="arrow">▼</span></button>
-        <div class="dropdown-content">
-          <a href="#" data-txt="menu_history">Historia</a>
-          <a href="#" data-txt="menu_organizer">Järjestäjä</a>
-          <a href="#" data-txt="menu_sponsors">Sponsorit</a>
-        </div>
-      </div>
-      <a href="#" class="sidebar-link" data-txt="menu_contact">Yhteystiedot</a>
-    </nav>
-    <div class="sidebar-footer">
-      <button id="settings-btn" class="settings-btn">
-        <span class="settings-icon">⚙</span> <span data-txt="menu_settings">Asetukset</span>
-      </button>
-    </div>
-  </aside>
-
-  <div id="overlay" class="overlay"></div>
-
-  <div id="settings-modal" class="modal-overlay hidden">
-    <div class="modal-card">
-      <h3 data-txt="menu_settings">Asetukset</h3>
-      <div class="form-group" style="margin-top:15px;">
-        <label data-txt="label_fname">Etunimi</label>
-        <input type="text" id="settings-fname">
-      </div>
-      <div class="form-group">
-        <label data-txt="label_lname">Sukunimi</label>
-        <input type="text" id="settings-lname">
-      </div>
-      <div class="form-group checkbox-group">
-        <input type="checkbox" id="settings-darkmode">
-        <label for="settings-darkmode" data-txt="label_darkmode">Tumma tila (Dark Mode)</label>
-      </div>
-      <div style="display:flex; gap:10px; margin-top:20px;">
-        <button id="save-settings-btn" class="btn btn-primary" data-txt="btn_save">Tallenna</button>
-        <button id="close-settings-btn" class="btn btn-secondary" data-txt="btn_cancel">Peruuta</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="join-modal" class="modal-overlay hidden">
-    <div class="modal-card">
-      <h3 data-txt="modal_title">Ilmoittautumistiedot</h3>
-      
-      <div class="form-group" style="margin-top:15px;">
-        <label data-txt="q_singles">Haluatko osallistua singeliin (kaksinpeli)?</label>
-        <select id="join-singles">
-          <option value="kylla" data-txt="opt_yes">Kyllä</option>
-          <option value="ei" data-txt="opt_no">Ei</option>
-        </select>
-      </div>
-
-      <div class="form-group" id="class-group">
-        <label data-txt="q_class">Mihin luokkaan haluat osallistua?</label>
-        <select id="join-class">
-          <option value="hupi" data-txt="class_casual">Hupi</option>
-          <option value="harraste" data-txt="class_inter">Harraste</option>
-          <option value="kilpa" data-txt="class_pro">Kilpa</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label data-txt="q_doubles">Haluatko osallistua neluriin (nelinpeli)?</label>
-        <select id="join-doubles">
-          <option value="kylla" data-txt="opt_yes">Kyllä</option>
-          <option value="ei" data-txt="opt_no">Ei</option>
-        </select>
-      </div>
-
-      <div style="display:flex; gap:10px; margin-top:20px;">
-        <button id="confirm-join-btn" class="btn btn-primary" data-txt="btn_send_req">Lähetä pyyntö</button>
-        <button id="cancel-join-btn" class="btn btn-secondary" data-txt="btn_cancel">Peruuta</button>
-      </div>
-    </div>
-  </div>
+  <div id="navbar-placeholder"></div>
+  <div id="sidebar-placeholder"></div>
 
   <main class="main-content">
-
-    <section id="auth-section" class="card hidden">
-      <div id="login-box">
-        <h2 data-txt="login_title">Kirjaudu sisään</h2>
-        <div class="form-group">
-          <label data-txt="label_email">Käyttäjätunnus (Sähköposti)</label>
-          <input type="email" id="login-email" placeholder="esim. kalle@email.com">
-        </div>
-        <div class="form-group">
-          <label data-txt="label_password">Salasana</label>
-          <input type="password" id="login-password" placeholder="******">
-        </div>
-        <div class="form-group checkbox-group">
-          <input type="checkbox" id="remember-me">
-          <label for="remember-me" data-txt="label_remember">Muista sisäänkirjautuminen tässä laitteessa</label>
-        </div>
-        <button id="submit-login" class="btn btn-primary" data-txt="nav_login">Kirjaudu</button>
-        <button id="google-login" class="btn btn-secondary" style="background-color: #df4a32; color: white; margin-top: 10px;" data-txt="btn_google_login">
-          Kirjaudu Google-tilillä
-        </button>
-        <p class="switch-form"><span data-txt="txt_no_account">Eikö tiliä?</span> <a href="#" id="go-to-register" data-txt="link_create_acc">Luo tili tästä</a></p>
-      </div>
-
-      <div id="register-box" class="hidden">
-        <h2 data-txt="register_title">Luo tili</h2>
-        <div class="form-group">
-          <label data-txt="label_fname">Etunimi</label>
-          <input type="text" id="reg-firstname" placeholder="Kalle">
-        </div>
-        <div class="form-group">
-          <label data-txt="label_lname">Sukunimi</label>
-          <input type="text" id="reg-lastname" placeholder="Pelaaja">
-        </div>
-        <div class="form-group">
-          <label data-txt="label_email">Sähköposti</label>
-          <input type="email" id="reg-email" placeholder="kalle@email.com">
-        </div>
-        <div class="form-group">
-          <label data-txt="label_password">Salasana</label>
-          <input type="password" id="reg-password" placeholder="******">
-        </div>
-        <button id="submit-register" class="btn btn-primary" data-txt="register_title">Luo tili</button>
-        <button id="google-register" class="btn btn-secondary" style="background-color: #df4a32; color: white; margin-top: 10px;" data-txt="btn_google_reg">
-          Luo tili Google-tilillä
-        </button>
-        <p class="switch-form"><span data-txt="txt_have_account">Onko sinulla jo tili?</span> <a href="#" id="go-to-login" data-txt="nav_login">Kirjaudu sisään</a></p>
-      </div>
-    </section>
-
-    <section id="home-section" class="view-section">
-      <div id="tournament-display"></div>
-    </section>
-
-    <section id="profile-section" class="view-section hidden">
-      <div class="card profile-card">
-        <div class="profile-header">
-          <h2 id="profile-name">Etunimi Sukunimi</h2>
-          <span id="role-badge" class="badge">User</span>
-        </div>
-        
-        <div class="kisa-info-box" id="profile-kisa-box"></div>
-        
-        <button id="logout-btn" class="btn btn-secondary" data-txt="btn_logout">Kirjaudu ulos</button>
-      </div>
-
-      <div id="admin-panel" class="card hidden" style="margin-top: 25px;">
-        <h2 data-txt="admin_title">Admin Paneeli</h2>
-        
-        <div class="admin-sub-section" style="margin-bottom: 30px; padding-bottom: 25px; border-bottom: 2px solid #f0f0f0;">
-          <h3 data-txt="admin_requests_title">Odottavat liittymispyynnöt</h3>
-          <div class="table-wrapper">
-            <table id="requests-table">
-              <thead>
-                <tr>
-                  <th data-txt="th_name">Nimi</th>
-                  <th>Singles</th>
-                  <th data-txt="th_class">Luokka</th>
-                  <th>Doubles</th>
-                  <th data-txt="th_actions">Toiminnot</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="admin-sub-section" style="margin-bottom: 30px; padding-bottom: 25px; border-bottom: 2px solid #f0f0f0;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3 data-txt="admin_create_title">Luo uusi turnaus</h3>
-            <button id="cancel-tournament-btn" class="action-btn hidden" style="background-color:#c0392b; padding: 10px 15px;" data-txt="btn_cancel_tour">Peruuta nykyinen turnaus</button>
-          </div>
-          
-          <div class="kisa-grid" style="margin-top:15px;">
-            <div class="form-group">
-              <label>Turnauksen nimi (Suomi)</label>
-              <input type="text" id="tour-name-fi" placeholder="esim. LöScaba Kesä">
-            </div>
-            <div class="form-group">
-              <label>Tournament Name (English)</label>
-              <input type="text" id="tour-name-en" placeholder="e.g. LöScaba Summer">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label data-txt="label_tour_img">Kuva (Kuvan URL-osoite)</label>
-            <input type="text" id="tour-image" placeholder="https://esimerkki.fi/kuva.jpg">
-          </div>
-
-          <div class="form-group">
-            <label>Kuvaus (Suomi)</label>
-            <textarea id="tour-desc-fi" placeholder="Kirjoita kuvaus suomeksi..." style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; font-size:15px; height:80px; font-family:inherit; resize: none;"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Description (English)</label>
-            <textarea id="tour-desc-en" placeholder="Write description in English..." style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; font-size:15px; height:80px; font-family:inherit; resize: none;"></textarea>
-          </div>
-
-          <div class="kisa-grid">
-            <div class="form-group">
-              <label data-txt="label_price_cust">Osallistumismaksu (Asiakkaat)</label>
-              <input type="text" id="tour-price-customer" placeholder="20€">
-            </div>
-            <div class="form-group">
-              <label data-txt="label_price_memb">Osallistumismaksu (Jäsenet)</label>
-              <input type="text" id="tour-price-member" placeholder="15€">
-            </div>
-          </div>
-          <button id="submit-tournament" class="btn btn-primary" style="background-color: #222;" data-txt="btn_publish_tour">Julkaise turnaus etusivulle</button>
-        </div>
-
-        <h3 data-txt="admin_users_title">Käyttäjien hallinta</h3>
-        <div class="table-wrapper">
-          <table id="users-table">
-            <thead>
-              <tr>
-                <th data-txt="th_name">Nimi</th>
-                <th>Sähköposti</th>
-                <th data-txt="th_role">Rooli</th>
-                <th data-txt="th_group">Ryhmä</th>
-                <th data-txt="th_actions">Toiminto</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section id="tournament-page-section" class="view-section hidden">
-      <div class="card" id="tournament-page-content"></div>
-    </section>
-
+    <div id="home-tournament-container"></div>
   </main>
+
+  <div id="join-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3 style="margin-bottom:15px;">Ilmoittautumistiedot</h3>
+      <div class="form-group">
+        <label>Haluatko osallistua singeliin (kaksinpeli)?</label>
+        <select id="modal-singles"><option value="kyllä">Kyllä</option><option value="ei">Ei</option></select>
+      </div>
+      <div class="form-group">
+        <label>Mihin luokkaan haluat osallistua?</label>
+        <select id="modal-class">
+          <option value="hupi">Hupi (Casual)</option>
+          <option value="harraste">Harraste (Intermediate)</option>
+          <option value="kilpa">Kilpa (Pro)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Haluatko osallistua neluriin (nelinpeli)?</label>
+        <select id="modal-doubles"><option value="kyllä">Kyllä</option><option value="ei">Ei</option></select>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
+        <button id="close-modal-btn" class="btn btn-secondary">Askel taaksepäin</button>
+        <button id="confirm-join-btn" class="btn btn-primary">Lähetä pyyntö</button>
+      </div>
+    </div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-  <script src="app.js"></script>
-  <script src="Tournament.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/index-home.js"></script>
 </body>
 </html>
