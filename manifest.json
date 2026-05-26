@@ -2,8 +2,8 @@
   "short_name": "LöScaba",
   "name": "LöScaba Badminton Tournament",
   "icons": [
-    { "src": "https://via.placeholder.com/192", "type": "image/png", "sizes": "192x192" },
-    { "src": "https://via.placeholder.com/512", "type": "image/png", "sizes": "512x512" }
+    { "src": "Gemini_Generated_Image_czmrjyczmrjyczmr.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "Gemini_Generated_Image_czmrjyczmrjyczmr.png", "type": "image/png", "sizes": "512x512" }
   ],
   "start_url": "./index.html",
   "background_color": "#ffffff",
