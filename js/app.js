@@ -69,8 +69,10 @@ function buildUIComponents() {
           <li id="menu-admin-item" class="hidden"><a href="admin.html" class="${currentPage === 'admin.html' ? 'active' : ''}" style="color: #e74c3c; font-weight: bold;">Admin Paneeli</a></li>
           <li><a href="asetukset.html" class="${currentPage === 'asetukset.html' ? 'active' : ''}">Asetukset</a></li>
           
-          <li id="pwa-install-item" class="hidden">
-            <a id="pwa-install-btn" style="background: var(--secondary-color); color: white; margin: 15px 20px; border-radius: 4px; text-align: center; border: none; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Asenna sovellus 📱</a>
+          <li id="pwa-install-item" class="hidden" style="list-style: none;">
+            <button id="pwa-install-btn" style="display: block; width: calc(100% - 40px); background: #3498db; color: white; margin: 15px auto; padding: 10px; border-radius: 4px; text-align: center; border: none; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer;">
+              Asenna sovellus 📱
+            </button>
           </li>
         </ul>
       </div>
@@ -79,7 +81,7 @@ function buildUIComponents() {
   }
 
   bindComponentEvents();
-  setupPWAInstallation(); // Kutsutaan PWA-logiikkaa heti kun UI on luotu
+  setupPWAInstallation();
 }
 
 // 2. LIITETÄÄN TAPAHTUMANKUUNTELIJAT KOMPONENTTEIHIN
@@ -95,7 +97,6 @@ function bindComponentEvents() {
     overlay.addEventListener('click', toggle);
   }
 
-  // Korjattu ja testattu dynaaminen dropdown-toiminnallisuus
   document.querySelectorAll('.dropdown-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
@@ -173,46 +174,42 @@ document.addEventListener('DOMContentLoaded', buildUIComponents);
 // PWA ASENNUSLOGIIKKA
 let deferredPrompt;
 
+// Kuunnellaan asennusvalmiutta globaalisti, koska sivu latautuu ennen kuin UI-komponentit välttämättä valmistuvat
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  // Jos UI on jo ehditty rakentaa, näytetään nappi heti
+  const installItem = document.getElementById('pwa-install-item');
+  if (installItem) {
+    installItem.classList.remove('hidden');
+  }
+});
+
 function setupPWAInstallation() {
-  const installItem = document.getElementById('menu-install-item') || document.getElementById('pwa-install-item');
+  const installItem = document.getElementById('pwa-install-item');
   const installBtn = document.getElementById('pwa-install-btn');
 
-  // Kuunnellaan selaimen asennusvalmiutta
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // Estetään selaimen oma oletus-palkki
-    e.preventDefault();
-    // Otetaan tapahtuma talteen globaaliin muuttujaan
-    deferredPrompt = e;
-    
-    // Tuodaan asennusnappi näkyviin sivupalkkiin
-    if (installItem) {
-      installItem.classList.remove('hidden');
-    }
-  });
+  // Jos asennustapahtuma napattiin jo ennen kuin tämä funktio suoritettiin, näytetään nappi
+  if (deferredPrompt && installItem) {
+    installItem.classList.remove('hidden');
+  }
 
-  // Kun käyttäjä klikkaa asennusnappia sivupalkissa
   if (installBtn) {
     installBtn.addEventListener('click', async () => {
       if (!deferredPrompt) return;
       
-      // Näytetään selaimen virallinen asennuskysely
       deferredPrompt.prompt();
-      
-      // Odotetaan käyttäjän vastausta
       const { outcome } = await deferredPrompt.userChoice;
       console.log(`Käyttäjän valinta: ${outcome}`);
       
-      // Tyhjennetään prompti, sitä ei voi käyttää kahdesti
       deferredPrompt = null;
-      
-      // Piilotetaan nappi, koska asennus alkoi/päättyi
       if (installItem) {
         installItem.classList.add('hidden');
       }
     });
   }
 
-  // Jos sovellus on jo asennettu ja se avataan kuvakkeesta, piilotetaan nappi varmuuden vuoksi
   window.addEventListener('appinstalled', () => {
     console.log('LöScaba asennettu onnistuneesti!');
     deferredPrompt = null;

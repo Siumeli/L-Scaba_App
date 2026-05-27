@@ -1,24 +1,30 @@
-const CACHE_NAME = 'loscaba-v3';
+const CACHE_NAME = 'loscaba-v6'; // Nostetaan versiota, jotta selain päivittää välimuistin
 const ASSETS = [
   './',
-  './index.html',
-  './tietoa.html',
-  './profiili.html',
-  './turnaus.html',
-  './admin.html',
-  './asetukset.html',
-  './css/style.css',
-  './js/app.js',
-  './js/index-home.js',
-  './js/profiili.js',
-  './js/turnaus.js',
-  './js/admin.js',
-  './js/asetukset.js',
-  './manifest.json'
+  'index.html',
+  'tietoa.html',
+  'profiili.html',
+  'turnaus.html',
+  'admin.html',
+  'asetukset.html',
+  'css/style.css',
+  'js/app.js',
+  'js/index-home.js',
+  'js/profiili.js',
+  'js/turnaus.js',
+  'js/admin.js',
+  'js/asetukset.js',
+  'manifest.json',
+  'LöScaba.png' // <-- Muutettu vastaamaan juurikansiota
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      // Käytetään erillistä lisäystä, jotta puuttuvat sivut (esim. jos kaikkia js-tiedostoja ei vielä ole luotu) eivät riko koko asennusta
+      return cache.addAll(ASSETS).catch(err => console.log("Cache addAll varoitus:", err));
+    })
+  );
 });
 
 self.addEventListener('activate', (e) => {
