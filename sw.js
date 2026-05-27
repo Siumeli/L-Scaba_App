@@ -1,4 +1,4 @@
-const CACHE_NAME = 'loscaba-v6'; // Nostetaan versiota, jotta selain päivittää välimuistin
+const CACHE_NAME = 'loscaba-v7'; // Nostetaan versiota, jotta selain päivittää välimuistin
 const ASSETS = [
   './',
   'index.html',
@@ -33,6 +33,7 @@ self.addEventListener('activate', (e) => {
   )));
 });
 
-self.addEventListener('fetch', (e) => {
+/*self.addEventListener('fetch', (e) => {
   e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
 });
+*/

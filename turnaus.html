@@ -11,9 +11,17 @@
   <div id="navbar-placeholder"></div>
   <div id="sidebar-placeholder"></div>
 
-  <main class="main-content">
+  <main class="main-content" style="padding-bottom: 70px;">
+    <div id="tournament-admin-panel" class="card hidden" style="border: 2px solid #e74c3c; margin-bottom: 20px;">
+      <h3 style="color: #e74c3c; margin-bottom: 10px;">Turnausohjaus (Admin)</h3>
+      <p style="font-size: 13px; margin-bottom: 15px;">Voit sekoittaa valitun lohkon/taulukon sisäiset pelaajat. Luokat pysyvät lukittuina.</p>
+      <button id="shuffle-players-btn" class="btn" style="background: #e67e22; color: #fff;">Sekoita nykyisen välilehden pelaajat 🎲</button>
+    </div>
+
     <div class="card" id="tournament-page-content">Haetaan live-kaavioita...</div>
   </main>
+
+  <nav class="tab-navigation" id="tournament-tabs"></nav>
 
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
