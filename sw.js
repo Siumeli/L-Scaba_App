@@ -1,4 +1,4 @@
-const CACHE_NAME = 'loscaba-v8'; // Nostetaan versiota, jotta selain päivittää välimuistin
+const CACHE_NAME = 'v1.0.1'; // <-- Muista nostaa tätä aina kun päivität!
 const ASSETS = [
   './',
   'index.html',
@@ -15,24 +15,42 @@ const ASSETS = [
   'js/admin.js',
   'js/asetukset.js',
   'manifest.json',
-  'LöScaba.png' // <-- Muutettu vastaamaan juurikansiota
+  'LöScaba.png'
 ];
 
+// 1. ASENNUS
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Käytetään erillistä lisäystä, jotta puuttuvat sivut (esim. jos kaikkia js-tiedostoja ei vielä ole luotu) eivät riko koko asennusta
       return cache.addAll(ASSETS).catch(err => console.log("Cache addAll varoitus:", err));
+    })
+  );
+  // PAKOTETAAN UUSI SERVICE WORKER AKTIIVISEKSI HETI
+  self.skipWaiting();
+});
+
+// 2. AKTIVOINTI
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log("Poistetaan vanha välimuisti:", key);
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => {
+      // OTETAAN KAIKKI SIVUN SULJETUT/AVOIMET VÄLILEHDET HETI HALTUUN
+      return self.clients.claim();
     })
   );
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then((keys) => Promise.all(
-    keys.map((key) => { if (key !== CACHE_NAME) return caches.delete(key); })
-  )));
-});
-
+// 3. PYYNNÖT
 self.addEventListener('fetch', (e) => {
-  e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
+  e.respondWith(
+    caches.match(e.request).then((res) => res || fetch(e.request))
+  );
 });
