@@ -94,9 +94,11 @@ if (document.getElementById('adm-publish-btn')) {
         location: document.getElementById('adm-location').value.trim(),
         descFi: document.getElementById('adm-desc-fi').value.trim(),
         descEn: document.getElementById('adm-desc-en').value.trim(),
+        status: "active",
         published: true
       }, { merge: true }).then(() => {
         alustaTyhjatLohkot();
+        console.log("Turnaus aloitettu ja kaaviot aktivoitu!");
         alert("Turnaus luotu/päivitetty!");
       });
     });
@@ -221,29 +223,24 @@ window.pAsetaStatus = function(uid, tila) {
 }
 
 function sijoitaPelaajaAutomaattisesti(pelaaja) {
-  // 1. SINGELILUOKAT AUTOMAATTITÄYTÖLLÄ LOHKOIHIN
   if (pelaaja.singles === "kyllä" || pelaaja.singles === "Kyllä") {
     let kohdeLohko = "F1"; 
     
     if (pelaaja.pClass === "kilpa") {
-      // Tasapainotetaan automaattisesti lohkojen K1 ja K2 välillä
       lisaaTasapainotettuPelaaja(["K1", "K2"], pelaaja.name);
     } else if (pelaaja.pClass === "harraste") {
-      // Tasapainotetaan automaattisesti lohkojen H1 ja H2 välillä
       lisaaTasapainotettuPelaaja(["H1", "H2"], pelaaja.name);
     } else {
       lisaaPelaajaLohkoon("F1", pelaaja.name);
     }
   }
 
-  // 2. NELURIPARI (4PLAY) AUTOMAATTITÄYTÖLLÄ LOHKOIHIN FP1-FP4
   if (pelaaja.doubles === "kyllä" || pelaaja.doubles === "Kyllä") {
     lisaaTasapainotettuPelaaja(["FP1", "FP2", "FP3", "FP4"], pelaaja.name + " / ?"); 
   }
 }
 
 function lisaaTasapainotettuPelaaja(lohkoLista, nimi) {
-  // Haetaan lohkojen nykyiset pelaajamäärät, ja valitaan se missä on vähiten pelaajia
   let hakuLupaukset = lohkoLista.map(lId => db.collection("tournaments").doc("active").collection("lohkot").doc(lId).get());
   
   Promise.all(hakuLupaukset).then(snapshots => {

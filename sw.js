@@ -1,4 +1,4 @@
-const CACHE_NAME = 'loscaba-v7'; // Nostetaan versiota, jotta selain päivittää välimuistin
+const CACHE_NAME = 'loscaba-v8'; // Nostetaan versiota, jotta selain päivittää välimuistin
 const ASSETS = [
   './',
   'index.html',
