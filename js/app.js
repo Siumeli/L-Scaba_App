@@ -183,7 +183,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   const installBtn = document.getElementById('pwa-install-btn');
   if (installBtn && !isRunningInPWA()) {
     installBtn.style.display = 'block';
-    installBtn.style.background = '#e67e22';
+    installBtn.style.background = '#8c008c';
     installBtn.innerText = 'Asenna sovellus 📱';
   }
 });

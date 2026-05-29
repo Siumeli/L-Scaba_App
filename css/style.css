@@ -1,11 +1,11 @@
 :root {
-  --bg-color: #f8fafc;
-  --card-bg: #ffffff;
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
   --text-color: #2d3748;
-  --primary-color: #e67e22; /* Lämmin oranssi */
-  --secondary-color: #e67e22;
-  --navbar-bg: #d35400; /* Tummempi oranssi */
-  --navbar-text: #ffffff;
+  --primary-color: #e622d2; /* Lämmin oranssi */
+  --secondary-color: #e622cf;
+  --navbar-bg: #d300ee; /* Tummempi oranssi */
+  --navbar-text: #fee3ff;
   --border-color: #e2e8f0;
 }
 
@@ -13,8 +13,8 @@ body.dark-mode {
   --bg-color: #121212;
   --card-bg: #1e1e1e;
   --text-color: #f7fafc;
-  --primary-color: #d35400;
-  --navbar-bg: #a04000;
+  --primary-color: #e622d2;
+  --navbar-bg: #d300ee;
   --border-color: #333333;
 }
 
