@@ -165,38 +165,79 @@ auth.onAuthStateChanged(user => {
 
 document.addEventListener('DOMContentLoaded', buildUIComponents);
 
-let deferredPrompt;
+let deferredPrompt = null;
+
+// 1. TARKISTETAAN ONKO KÄYTTÄJÄ JO PWA-APPISSA VAI SELAIMESSA
+function isRunningInPWA() {
+  return window.matchMedia('(display-mode: standalone)').matches 
+      || window.navigator.standalone 
+      || document.referrer.includes('android-app://');
+}
+
+// 2. ANDROID / DESKTOP CHROME: Kaappaava asennustapahtuma
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
-  deferredPrompt = e;
+  deferredPrompt = e; // Tallennetaan asennuslupa muuttujaan
+  
+  // Jos ollaan selaimessa (ei PWA-tilassa), varmistetaan että nappi on näkyvissä ja valmiina
   const installBtn = document.getElementById('pwa-install-btn');
-  if (installBtn) {
+  if (installBtn && !isRunningInPWA()) {
+    installBtn.style.display = 'block';
     installBtn.style.background = '#e67e22';
     installBtn.innerText = 'Asenna sovellus 📱';
   }
 });
 
+// 3. NAPIN TOIMINNALLISUUS JA ALUSTUS
 function setupPWAInstallation() {
   const installBtn = document.getElementById('pwa-install-btn');
-  if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`Käyttäjän valinta: ${outcome}`);
-        deferredPrompt = null;
-      } else {
-        alert("LöScaba on valmis asennettavaksi! Jos käytät iOS-laitetta (iPhone/iPad), paina selaimen 'Jaa'-painiketta ja valitse 'Lisää koti-valikkoon'. Androidilla ja Desktoptilla voit asentaa myös suoraan selaimen asetustyökalujen kautta.");
-      }
-    });
+  if (!installBtn) return;
+
+  // JOS KÄYTTÄJÄ ON JO PWA-APPISSA: Piilotetaan nappi kokonaan
+  if (isRunningInPWA()) {
+    installBtn.style.display = 'none';
+    return;
   }
 
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  // Jos ollaan iPhonen selaimessa, muutetaan teksti jo valmiiksi kuvaavaksi
+  if (isIOS) {
+    installBtn.style.display = 'block'; // iPhonelle ennen kaikkea selaimessa näkyviin
+    installBtn.innerText = 'Asennusohjeet (iOS) 📱';
+  }
+
+  installBtn.addEventListener('click', async () => {
+    // REIPAS ANDROID / DESKTOP: Jos selain on antanut asennusluvan, ladataan suoraan!
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // Tämä avaa sen välittömän "Asenna" -ruudun puhelimeen
+      
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`Käyttäjän valinta: ${outcome}`);
+      
+      if (outcome === 'accepted') {
+        deferredPrompt = null;
+        installBtn.style.background = '#2ecc71';
+        installBtn.innerText = 'Asennetaan... ✓';
+        setTimeout(() => { installBtn.style.display = 'none'; }, 2000);
+      }
+    } 
+    // IPHONE / IOS SELAUS: Näytetään ohjeet, koska Apple ei salli suoraa latausta
+    else if (isIOS) {
+      alert("Asenna LöScaba iPhonellesi:\n\n1. Paina Safarin alareunasta 'Jaa'-painiketta (neliö, jossa nuoli ylös).\n2. Valitse valikosta 'Lisää koti-valikkoon' (Add to Home Screen).\n3. Paina 'Lisää' oikeasta yläkulmasta.");
+    } 
+    // VARAJÄRJESTELMÄ: Jos Android-selain ei vielä jostain syystä hoksannut PWA:ta
+    else {
+      alert("LöScaba on valmis ladattavaksi! Voit asentaa sen suoraan selaimen asetuksista: paina oikean yläkulman kolmea pistettä (⋮) ja valitse 'Asenna sovellus'.");
+    }
+  });
+
+  // Piilotetaan nappi heti, jos asennus onnistuu lennosta
   window.addEventListener('appinstalled', () => {
     console.log('LöScaba asennettu onnistuneesti!');
     deferredPrompt = null;
-    if (installBtn) {
-      installBtn.style.background = '#2ecc71';
-      installBtn.innerText = 'Sovellus asennettu! ✓';
-    }
+    installBtn.style.background = '#2ecc71';
+    installBtn.innerText = 'Sovellus asennettu! ✓';
+    setTimeout(() => { installBtn.style.display = 'none'; }, 1500);
   });
 }
