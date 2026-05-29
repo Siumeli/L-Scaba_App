@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v1.0.1'; // <-- Muista nostaa tätä aina kun päivität!
+const CACHE_NAME = 'v1.0.2'; // <-- Muista nostaa tätä aina kun päivität!
 const ASSETS = [
   './',
   'index.html',
