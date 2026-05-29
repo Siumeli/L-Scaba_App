@@ -121,4 +121,52 @@ document.addEventListener('DOMContentLoaded', () => {
       auth.signOut().then(() => window.location.href = 'index.html');
     });
   }
+
+  // Funktio hoitamaan Google-kirjautumisen popup-ikkunalla
+function handleGoogleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  
+  auth.signInWithPopup(provider)
+    .then(cred => {
+      // Tarkistetaan, löytyykö käyttäjälle jo Firestore-dokumentti
+      const userDocRef = db.collection("users").doc(cred.user.uid);
+      
+      return userDocRef.get().then(doc => {
+        if (!doc.exists) {
+          // Jos käyttäjä kirjautuu ekkaa kertaa, napataan tiedot Google-tililtä
+          const displayName = cred.user.displayName || "";
+          const nameParts = displayName.split(" ");
+          const firstname = nameParts[0] || "Google";
+          const lastname = nameParts.slice(1).join(" ") || "Käyttäjä";
+          const email = cred.user.email || "";
+
+          // Luodaan uusi profiili Firestoreen
+          return userDocRef.set({
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            role: "user",
+            group: "asiakas",
+            theme: "light",
+            emailNotification: false
+          });
+        }
+      });
+    })
+    .catch(err => {
+      console.error("Google-kirjautumisvirhe: ", err);
+      alert("Google-kirjautuminen epäonnistui: " + err.message);
+    });
+}
+
+// Laita tämä muiden tapahtumankuuntelijoiden (kuten 'submit-login') sekaan DOMContentLoaded-lohkoon
+const googleLoginBtn = document.getElementById('google-login');
+const googleRegBtn = document.getElementById('google-reg');
+
+if (googleLoginBtn) {
+  googleLoginBtn.addEventListener('click', handleGoogleLogin);
+}
+if (googleRegBtn) {
+  googleRegBtn.addEventListener('click', handleGoogleLogin);
+}
 });
