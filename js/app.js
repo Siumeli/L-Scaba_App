@@ -61,6 +61,7 @@ function buildUIComponents() {
           <li>
             <button class="dropdown-btn">Tietoa meistä <span class="arrow">▼</span></button>
             <ul class="dropdown-container">
+              <li><a href="tietoa.html#tarina">LöScaban tarina</a></li>
               <li><a href="tietoa.html#yhteystiedot">Yhteystiedot</a></li>
             </ul>
           </li>

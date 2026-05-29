@@ -12,8 +12,56 @@ function initProfilePage() {
       document.getElementById('profile-name').innerText = `${currentUser.firstname} ${currentUser.lastname}`;
       document.getElementById('profile-email-view').innerText = `Tili: ${currentUser.email}`;
       document.getElementById('role-badge').innerText = currentUser.role.toUpperCase();
+      
+      // Ladataan turnaushistoria heti kun profiili on alustettu
+      loadTournamentHistory();
     }
   }
+}
+
+// Haetaan käyttäjän turnaushistoria Firestoresta
+function loadTournamentHistory() {
+  const historyList = document.getElementById('history-list');
+  if (!historyList) return;
+
+  // Haetaan kaikki turnaukset, jotka ovat päättyneet (status: 'ended' tai 'finished')
+  // Huom: Voit muuttaa hakuehtoja sen mukaan, miten olet Firestoren rakentanut.
+  db.collection("tournaments")
+    .where("status", "==", "finished")
+    .get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        historyList.innerHTML = `<p style="text-align: center; opacity: 0.7; padding: 20px 0;">Ei aiempia turnauksia.</p>`;
+        return;
+      }
+
+      let html = '<table><thead><tr><th>Turnaus</th><th>Päivämäärä</th><th>Kaavio</th></tr></thead><tbody>';
+      let hasTournaments = false;
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        // Tarkistetaan tässä, oliko käyttäjä mukana turnauksessa, tai haetaan suoraan kaikki vanhat kisa-arkistot
+        html += `
+          <tr>
+            <td><strong>${data.name || 'Nimetön turnaus'}</strong></td>
+            <td>${data.date || 'Ei pvm'}</td>
+            <td>
+              <a href="turnaus.html?id=${doc.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; text-decoration: none;">
+                Katso kaavio
+              </a>
+            </td>
+          </tr>
+        `;
+        hasTournaments = true;
+      });
+
+      html += '</tbody></table>';
+      historyList.innerHTML = hasTournaments ? html : `<p style="text-align: center; opacity: 0.7; padding: 20px 0;">Ei aiempia turnauksia.</p>`;
+    })
+    .catch(err => {
+      console.error("Virhe historian latauksessa:", err);
+      historyList.innerHTML = `<p style="text-align: center; color: #e74c3c; padding: 20px 0;">Virhe ladattaessa historiaa.</p>`;
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,6 +76,28 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('register-box').classList.add('hidden');
     document.getElementById('login-box').classList.remove('hidden');
   });
+
+  // Välilehtien logiikka
+  const tabInfoBtn = document.getElementById('tab-info-btn');
+  const tabHistoryBtn = document.getElementById('tab-history-btn');
+  const infoContent = document.getElementById('profile-info-content');
+  const historyContent = document.getElementById('profile-history-content');
+
+  if (tabInfoBtn && tabHistoryBtn) {
+    tabInfoBtn.addEventListener('click', () => {
+      tabInfoBtn.classList.add('active');
+      tabHistoryBtn.classList.remove('active');
+      infoContent.classList.remove('hidden');
+      historyContent.classList.add('hidden');
+    });
+
+    tabHistoryBtn.addEventListener('click', () => {
+      tabHistoryBtn.classList.add('active');
+      tabInfoBtn.classList.remove('active');
+      historyContent.classList.remove('hidden');
+      infoContent.classList.add('hidden');
+    });
+  }
 
   if (document.getElementById('submit-login')) {
     document.getElementById('submit-login').addEventListener('click', () => {
