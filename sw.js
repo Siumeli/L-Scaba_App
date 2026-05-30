@@ -1,10 +1,11 @@
-const CACHE_NAME = 'v1.0.2'; // <-- Muista nostaa tätä aina kun päivität!
+const CACHE_NAME = 'v1.0.3'; // <-- Muista nostaa tätä aina kun päivität!
 const ASSETS = [
   './',
   'index.html',
   'tietoa.html',
   'profiili.html',
   'turnaus.html',
+  'peli.html',
   'admin.html',
   'asetukset.html',
   'css/style.css',
@@ -15,7 +16,8 @@ const ASSETS = [
   'js/admin.js',
   'js/asetukset.js',
   'manifest.json',
-  'LöScaba.png'
+  'LöScaba.png',
+  'Smash.png'
 ];
 
 // 1. ASENNUS

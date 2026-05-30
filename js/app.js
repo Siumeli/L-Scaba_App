@@ -65,8 +65,9 @@ function buildUIComponents() {
               <li><a href="tietoa.html#yhteystiedot">Yhteystiedot</a></li>
             </ul>
           </li>
+          <li id="game"><a href="peli.html" class="${currentPage === 'peli.html' ? 'active' : ''}">Smash minipeli 🎮</a></li>
           <li id="menu-tour-item" class="hidden"><a href="turnaus.html" class="${currentPage === 'turnaus.html' ? 'active' : ''}">Turnaussivu 🏸</a></li>
-          <li id="menu-admin-item" class="hidden"><a href="admin.html" class="${currentPage === 'admin.html' ? 'active' : ''}" style="color: #e74c3c; font-weight: bold;">Hallinta Paneeli</a></li>
+          <li id="menu-admin-item" class="hidden"><a href="admin.html" class="${currentPage === 'admin.html' ? 'active' : ''}" style="color: #ff0080; font-weight: bold;">Hallinta Paneeli</a></li>
           <li><a href="asetukset.html" class="${currentPage === 'asetukset.html' ? 'active' : ''}">Asetukset</a></li>
           
           <li id="pwa-install-item" style="list-style: none;">
