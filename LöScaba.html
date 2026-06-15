@@ -1,0 +1,2530 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LöScaba - Kaikki Sivut Yhdessä</title>
+    <style>
+        /* --- STREAMING_CHUNK: Määritellään modernit tyylit ja CSS-muuttujat --- */
+        :root {
+          --bg-color: #0d0e12;
+          --card-bg: #15171e;
+          --text-color: #f7fafc;
+          --text-muted: #a0aec0;
+          --primary-color: #e622d2; /* Kirkas Magenta/Purppura */
+          --secondary-color: #3182ce; /* Moderni Sininen */
+          --navbar-bg: #11001c; /* Tumma violetti */
+          --navbar-text: #fee3ff;
+          --border-color: #2d3748;
+          --success-color: #2ecc71;
+          --danger-color: #e74c3c;
+          --warning-color: #f39c12;
+        }
+
+        body.dark-mode {
+          --bg-color: #0d0e12;
+          --card-bg: #15171e;
+          --text-color: #f7fafc;
+          --border-color: #2d3748;
+        }
+
+        * { 
+          box-sizing: border-box; 
+          margin: 0; 
+          padding: 0; 
+          font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; 
+        }
+
+        body { 
+          background-color: var(--bg-color); 
+          color: var(--text-color); 
+          transition: background 0.3s ease, color 0.3s ease; 
+          padding-top: 75px; 
+          overflow-x: hidden;
+        }
+
+        /* NAVBAR & SIDEBAR KORISTELU */
+        .navbar { 
+          position: fixed; 
+          top: 0; 
+          left: 0; 
+          right: 0; 
+          height: 65px; 
+          background: linear-gradient(135deg, var(--navbar-bg), #2a004f); 
+          color: var(--navbar-text); 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          padding: 0 24px; 
+          z-index: 1000; 
+          box-shadow: 0 4px 20px rgba(0,0,0,0.3); 
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-left, .nav-right { 
+          display: flex; 
+          align-items: center; 
+          gap: 15px; 
+        }
+        
+        .menu-btn, .lang-btn, .profile-nav-btn { 
+          background: rgba(255, 255, 255, 0.08); 
+          border: 1px solid rgba(255,255,255,0.15); 
+          color: white; 
+          padding: 8px 18px; 
+          border-radius: 30px; 
+          cursor: pointer; 
+          font-size: 0.95rem; 
+          font-weight: 600; 
+          transition: all 0.25s ease; 
+        }
+        
+        .menu-btn:hover, .lang-btn:hover, .profile-nav-btn:hover { 
+          background: rgba(255, 255, 255, 0.2); 
+          transform: translateY(-1px); 
+          box-shadow: 0 4px 10px rgba(230, 34, 210, 0.25);
+        }
+        
+        .menu-btn { 
+          font-size: 1.4rem; 
+          border: none; 
+          background: transparent; 
+          padding: 5px; 
+        }
+        
+        .logo { 
+          font-size: 1.7rem; 
+          font-weight: 800; 
+          cursor: pointer; 
+          letter-spacing: 0.5px; 
+          text-shadow: 0 2px 10px rgba(230, 34, 210, 0.3); 
+          background: linear-gradient(to right, #ff00ea, var(--primary-color));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar { 
+          position: fixed; 
+          top: 0; 
+          left: -290px; 
+          width: 290px; 
+          height: 100%; 
+          background: #111318; 
+          z-index: 1001; 
+          transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+          box-shadow: 4px 0 25px rgba(0,0,0,0.5); 
+          overflow-y: auto; 
+          padding-top: 20px; 
+          border-right: 1px solid var(--border-color);
+        }
+        
+        .sidebar.open { 
+          left: 0; 
+        }
+        
+        .sidebar-brand { 
+          font-size: 1.5rem; 
+          font-weight: 700; 
+          padding: 15px 24px; 
+          color: var(--primary-color); 
+          border-bottom: 1px solid var(--border-color); 
+          margin-bottom: 15px; 
+        }
+        
+        .sidebar-menu { 
+          list-style: none; 
+        }
+        
+        .sidebar-menu li { 
+          width: 100%; 
+        }
+        
+        .sidebar-menu a { 
+          display: block; 
+          padding: 14px 24px; 
+          color: var(--text-muted); 
+          text-decoration: none; 
+          border-left: 4px solid transparent; 
+          cursor: pointer; 
+          font-weight: 600; 
+          transition: all 0.2s ease; 
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active { 
+          background: rgba(230, 34, 210, 0.08); 
+          color: var(--primary-color); 
+          border-left-color: var(--primary-color); 
+        }
+
+        /* DROPDOWN MENU */
+        .dropdown-btn { 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          width: 100%; 
+          background: none; 
+          border: none; 
+          text-align: left; 
+          padding: 14px 24px; 
+          color: var(--text-muted); 
+          font-size: 1rem; 
+          font-weight: 600; 
+          cursor: pointer; 
+          border-left: 4px solid transparent; 
+          transition: all 0.2s ease; 
+        }
+        
+        .dropdown-btn:hover { 
+          background: rgba(230, 34, 210, 0.08); 
+          color: var(--primary-color); 
+        }
+        
+        .dropdown-btn .arrow { 
+          font-size: 0.8rem; 
+          transition: transform 0.2s; 
+        }
+        
+        .dropdown-btn.open-menu .arrow { 
+          transform: rotate(180deg); 
+        }
+        
+        .dropdown-container { 
+          display: none; 
+          background: rgba(0,0,0,0.2); 
+          list-style: none; 
+        }
+        
+        .dropdown-container.show { 
+          display: block; 
+        }
+        
+        .dropdown-container a { 
+          padding: 11px 40px; 
+          font-size: 0.95rem; 
+        }
+
+        .overlay { 
+          position: fixed; 
+          top: 0; 
+          left: 0; 
+          width: 100%; 
+          height: 100%; 
+          background: rgba(0,0,0,0.6); 
+          z-index: 1000; 
+          display: none; 
+          backdrop-filter: blur(4px); 
+        }
+        
+        .overlay.show { 
+          display: block; 
+        }
+
+        /* KORTTIEN JA SISÄLLÖN KORISTELU */
+        .page-section {
+          max-width: 850px; 
+          margin: 0 auto; 
+          padding: 20px 20px 80px 20px; 
+          animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card { 
+          background: var(--card-bg); 
+          padding: 28px; 
+          border-radius: 16px; 
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+          border: 1px solid var(--border-color); 
+          margin-bottom: 25px; 
+          transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        
+        .card:hover { 
+          transform: translateY(-2px);
+          box-shadow: 0 15px 35px rgba(230, 34, 210, 0.05); 
+        }
+
+        .hidden { 
+          display: none !important; 
+        }
+
+        /* BUTTONS & FORMS */
+        .btn { 
+          display: inline-block; 
+          padding: 12px 24px; 
+          border: none; 
+          border-radius: 10px; 
+          cursor: pointer; 
+          font-weight: 700; 
+          text-align: center; 
+          font-size: 0.95rem; 
+          transition: all 0.2s ease; 
+          box-shadow: 0 4px 6px rgba(0,0,0,0.15); 
+        }
+        
+        .btn-primary { 
+          background: linear-gradient(135deg, var(--primary-color), var(--navbar-bg)); 
+          color: white; 
+        }
+        
+        .btn-primary:hover { 
+          transform: translateY(-1px); 
+          box-shadow: 0 6px 15px rgba(230, 34, 210, 0.3); 
+          opacity: 0.95; 
+        }
+        
+        .btn-secondary { 
+          background: #4a5568; 
+          color: white; 
+        }
+        
+        .btn-secondary:hover { 
+          transform: translateY(-1px); 
+          opacity: 0.95; 
+        }
+
+        .form-group { 
+          margin-bottom: 20px; 
+        }
+        
+        .form-group label { 
+          display: block; 
+          margin-bottom: 8px; 
+          font-weight: 700; 
+          font-size: 0.9rem; 
+          color: var(--text-muted); 
+          text-transform: uppercase; 
+          letter-spacing: 0.5px; 
+        }
+        
+        .form-group input, .form-group textarea, .form-group select { 
+          width: 100%; 
+          padding: 12px; 
+          border: 1px solid var(--border-color); 
+          border-radius: 8px; 
+          background: rgba(0, 0, 0, 0.2); 
+          color: var(--text-color); 
+          font-size: 1rem; 
+          transition: border-color 0.2s ease, box-shadow 0.2s ease; 
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { 
+          border-color: var(--primary-color); 
+          outline: none; 
+          box-shadow: 0 0 0 3px rgba(230, 34, 210, 0.2); 
+        }
+
+        /* ADMIN TYYLIT */
+        .adm-label {
+          display: block;
+          margin-top: 15px;
+          margin-bottom: 6px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          color: var(--text-muted);
+        }
+        
+        .adm-input {
+          width: 100%;
+          padding: 12px;
+          margin-bottom: 12px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          background: rgba(0,0,0,0.2);
+          color: #fff;
+        }
+
+        /* TAULUKOT & MERKIT */
+        table { 
+          width: 100%; 
+          border-collapse: collapse; 
+          margin-top: 15px; 
+          border-radius: 8px; 
+          overflow: hidden; 
+        }
+        
+        th, td { 
+          padding: 14px; 
+          text-align: left; 
+          border-bottom: 1px solid var(--border-color); 
+        }
+        
+        th { 
+          background: rgba(230, 34, 210, 0.08); 
+          color: var(--primary-color); 
+          font-weight: 700; 
+        }
+        
+        tr:hover td { 
+          background: rgba(255, 255, 255, 0.02); 
+        }
+        
+        .badge { 
+          background: linear-gradient(135deg, var(--primary-color), var(--navbar-bg)); 
+          color: white; 
+          padding: 4px 10px; 
+          border-radius: 12px; 
+          font-size: 0.8rem; 
+          font-weight: 700; 
+        }
+
+        .tab-navigation {
+          display: flex;
+          gap: 8px;
+          overflow-x: auto;
+          padding: 10px 5px;
+          margin-bottom: 15px;
+          scrollbar-width: none;
+        }
+        
+        .tab-navigation::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .tab-btn {
+          background: var(--card-bg);
+          color: var(--text-color);
+          border: 1px solid var(--border-color);
+          padding: 10px 18px;
+          border-radius: 20px;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 0.9rem;
+          white-space: nowrap;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn:hover {
+          border-color: var(--primary-color);
+          color: var(--primary-color);
+        }
+        
+        .tab-btn.active {
+          background: var(--primary-color);
+          color: white;
+          border-color: var(--primary-color);
+          box-shadow: 0 4px 10px rgba(230, 34, 210, 0.3);
+        }
+
+        /* --- SIVUASETUKSET & KYTKIMET --- */
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 50px;
+          height: 26px;
+        }
+        
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #4a5568;
+          transition: .4s;
+          border-radius: 34px;
+        }
+        
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 18px;
+          width: 18px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          transition: .4s;
+          border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+          background-color: var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+          transform: translateX(24px);
+        }
+
+        /* --- PLAYOFFS KISAKAAVIO --- */
+        .bracket-scroll-container {
+          width: 100%;
+          overflow-x: auto;
+          padding: 15px 5px;
+          margin-top: 15px;
+          border-radius: 8px;
+          background: rgba(0, 0, 0, 0.2);
+          box-sizing: border-box;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .bracket-wrapper {
+          display: flex;
+          gap: 40px;
+          min-width: max-content;
+          align-items: center;
+          padding: 10px;
+        }
+
+        .bracket-round {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 20px;
+          min-width: 200px;
+        }
+
+        .round-title {
+          text-align: center;
+          font-weight: bold;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-bottom: 10px;
+          color: var(--primary-color);
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 4px;
+        }
+
+        .bracket-match {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .match-player {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 12px;
+          font-size: 0.9rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+          background: rgba(0, 0, 0, 0.1);
+        }
+
+        .match-player:last-child {
+          border-bottom: none;
+        }
+
+        .match-player.winner {
+          background: rgba(46, 204, 113, 0.12);
+          font-weight: bold;
+        }
+
+        .player-name {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-right: 10px;
+        }
+
+        .player-score {
+          background: rgba(0, 0, 0, 0.3);
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-weight: bold;
+          min-width: 20px;
+          text-align: center;
+        }
+
+        /* --- STREAMING_CHUNK: Määritellään uuden Smash-pelin pelialueen tyylit --- */
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            background: linear-gradient(to bottom, #110c22, #1d143a);
+            border: 3px solid var(--primary-color);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(230, 34, 210, 0.15);
+            margin: 0 auto;
+            touch-action: none;
+        }
+
+        #opponent-container {
+            position: absolute;
+            top: 40px;
+            left: 160px;
+            width: 80px;
+            height: 80px;
+            z-index: 5;
+            transition: left 0.15s ease-out;
+        }
+
+        #score-board {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            z-index: 10;
+        }
+
+        #racket {
+            position: absolute;
+            bottom: 30px;
+            left: 170px;
+            width: 60px;
+            height: 14px;
+            background: linear-gradient(to right, var(--primary-color), #ff007f);
+            border: 2px solid #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 0 12px var(--primary-color);
+            z-index: 8;
+        }
+
+        .shuttlecock {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            z-index: 4;
+        }
+
+        .normal-sula {
+            filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+        }
+
+        .gold-sula {
+            filter: drop-shadow(0 0 8px #f1c40f);
+        }
+
+        #game-over-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(13, 14, 18, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .instructions {
+            margin-top: 15px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* MOBIILIOPTIMOINNIT */
+        @media (max-width: 768px) {
+          .navbar {
+            padding: 0 16px;
+          }
+          .logo {
+            font-size: 1.4rem;
+          }
+          .menu-btn, .lang-btn, .profile-nav-btn {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+          }
+          .bracket-round {
+            min-width: 170px;
+            gap: 15px;
+          }
+          .round-title {
+            font-size: 0.8rem;
+          }
+          .match-player {
+            padding: 6px 10px;
+            font-size: 0.85rem;
+          }
+        }
+    </style>
+    <!-- Firebase SDK lataus -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+    <!-- NAVBAREILLE JA SIDEBARILLE VARATUT PAIKAT -->
+    <div id="navbar-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <!-- 1. ETUSIVU -->
+    <section id="page-index" class="page-section">
+        <!-- Turnaus-osio dynaamista hallintaa varten -->
+        <div id="home-tournament-container" class="hidden"></div>
+
+        <!-- Sponsori/Mainos-osio -->
+        <div id="home-ads-container"></div>
+
+        <!-- Ilmoittautumislomake (Modal) -->
+        <div id="join-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; z-index:2000; backdrop-filter: blur(5px);">
+            <div style="background:var(--card-bg); border: 1px solid var(--border-color); padding:30px; border-radius:16px; width:90%; max-width:420px; position:relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+                <h3 style="margin-top:0; color:var(--primary-color); font-size:1.4rem; font-weight:700; margin-bottom:15px;">Ilmoittaudu turnaukseen</h3>
+                
+                <label style="display:block; margin-top:15px; font-weight:600; font-size:0.9rem; color:var(--text-muted);">Osallistun kaksinpeliin (Singles):</label>
+                <select id="modal-singles" style="width:100%; padding:10px; margin-top:5px; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+                    <option value="kyllä">Kyllä</option>
+                    <option value="ei">Ei</option>
+                </select>
+
+                <label style="display:block; margin-top:15px; font-weight:600; font-size:0.9rem; color:var(--text-muted);">Tasoluokka (jos kaksinpeli):</label>
+                <select id="modal-class" style="width:100%; padding:10px; margin-top:5px; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+                    <option value="hupi">Hupi (Kaikille avoin)</option>
+                    <option value="harraste">Harraste (Kokeneemmat)</option>
+                    <option value="kilpa">Kilpa (Aktiivipelaajat)</option>
+                </select>
+
+                <label style="display:block; margin-top:15px; font-weight:600; font-size:0.9rem; color:var(--text-muted);">Osallistun nelinpeliin (Doubles):</label>
+                <select id="modal-doubles" style="width:100%; padding:10px; margin-top:5px; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+                    <option value="kyllä">Kyllä (Parit arvotaan / 4PLAY)</option>
+                    <option value="ei">Ei</option>
+                </select>
+
+                <div style="margin-top:25px; text-align:right; display:flex; gap:10px; justify-content:flex-end;">
+                    <button id="close-modal-btn" style="padding:10px 16px; background:#4a5568; border:none; border-radius:8px; cursor:pointer; color:#fff; font-weight:600; transition:opacity 0.2s;">Peruuta</button>
+                    <button id="confirm-join-btn" style="padding:10px 16px; background:var(--primary-color); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700; transition:opacity 0.2s;">Lähetä</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. PROFIILISIVU -->
+    <section id="page-profiili" class="page-section hidden">
+        <div id="auth-section" class="hidden">
+            <div id="login-box" class="card">
+                <h2 style="margin-bottom: 20px; font-weight: 800;">Kirjaudu sisään</h2>
+                <input type="email" id="login-email" placeholder="Sähköposti" style="width:100%; padding:12px; margin:8px 0; border-radius:8px; background:rgba(0,0,0,0.2); border:1px solid var(--border-color); color:#fff;">
+                <input type="password" id="login-password" placeholder="Salasana" style="width:100%; padding:12px; margin:8px 0; border-radius:8px; background:rgba(0,0,0,0.2); border:1px solid var(--border-color); color:#fff;">
+                <button id="submit-login" class="btn btn-primary" style="width:100%; padding:12px; margin-top:15px;">Kirjaudu</button>
+                
+                <div style="margin: 20px 0; text-align: center; color: var(--text-muted); font-weight:600;">tai</div>
+                <button id="google-login" class="btn" style="width:100%; padding:12px; background:#fff; color:#333; border:none; font-weight:700;">Kirjaudu Google-tilillä 🚀</button>
+
+                <p style="margin-top:20px; text-align:center; font-size:14px; color:var(--text-muted);">Eikö tiliä? <span id="go-to-register" style="color:var(--primary-color); cursor:pointer; font-weight:bold;">Rekisteröidy tästä</span></p>
+            </div>
+
+            <div id="register-box" class="card hidden">
+                <h2 style="margin-bottom: 20px; font-weight: 800;">Luo uusi tili</h2>
+                <input type="text" id="reg-firstname" placeholder="Etunimi" style="width:100%; padding:12px; margin:8px 0; border-radius:8px; background:rgba(0,0,0,0.2); border:1px solid var(--border-color); color:#fff;">
+                <input type="text" id="reg-lastname" placeholder="Sukunimi" style="width:100%; padding:12px; margin:8px 0; border-radius:8px; background:rgba(0,0,0,0.2); border:1px solid var(--border-color); color:#fff;">
+                <input type="email" id="reg-email" placeholder="Sähköposti" style="width:100%; padding:12px; margin:8px 0; border-radius:8px; background:rgba(0,0,0,0.2); border:1px solid var(--border-color); color:#fff;">
+                <input type="password" id="reg-password" placeholder="Salasana (väh. 6 merkkiä)" style="width:100%; padding:12px; margin:8px 0; border-radius:8px; background:rgba(0,0,0,0.2); border:1px solid var(--border-color); color:#fff;">
+                <button id="submit-register" class="btn btn-primary" style="width:100%; padding:12px; margin-top:15px;">Luo tili</button>
+                
+                <div style="margin: 20px 0; text-align: center; color: var(--text-muted); font-weight:600;">tai</div>
+                <button id="google-reg" class="btn" style="width:100%; padding:12px; background:#fff; color:#333; border:none; font-weight:700;">Rekisteröidy Google-tilillä 🚀</button>
+
+                <p style="margin-top:20px; text-align:center; font-size:14px; color:var(--text-muted);">Onko sinulla jo tili? <span id="go-to-login" style="color:var(--primary-color); cursor:pointer; font-weight:bold;">Kirjaudu sisään</span></p>
+            </div>
+        </div>
+
+        <div id="profile-section" class="hidden">
+            <div class="card" style="text-align: center; padding: 35px 20px;">
+                <div style="width:90px; height:90px; background:var(--primary-color); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px auto; font-size:2.5rem; font-weight:bold; box-shadow:0 6px 20px rgba(230,34,210,0.4);">👤</div>
+                <h2 id="profile-name" style="margin-bottom:8px; font-weight:800;">Ladataan...</h2>
+                <div id="role-badge" class="badge" style="background:#3182ce; margin-bottom:12px; padding:6px 14px; font-size:0.85rem;">USER</div>
+                <p id="profile-email-view" style="color:var(--text-muted); font-size:14px; font-weight:500;">Tili: -</p>
+            </div>
+
+            <div class="profile-tabs" style="display:flex; margin-top:25px; border-bottom:1px solid var(--border-color); margin-bottom: 20px;">
+                <button id="tab-info-btn" class="tab-link active" style="flex:1; padding:15px; background:none; border:none; font-weight:bold; cursor:pointer; color:var(--text-color); border-bottom:3px solid var(--primary-color); font-size:1rem; outline:none; transition:all 0.2s;">Omat Tiedot</button>
+                <button id="tab-history-btn" class="tab-link" style="flex:1; padding:15px; background:none; border:none; font-weight:bold; cursor:pointer; color:var(--text-muted); font-size:1rem; outline:none; transition:all 0.2s;">Turnaushistoria 🏆</button>
+            </div>
+
+            <div id="profile-info-content">
+                <div class="card">
+                    <h3 style="margin-top:0; color:var(--primary-color); font-size:1.3rem; font-weight:700; margin-bottom:12px;">Tervetuloa LöScaba-sovellukseen!</h3>
+                    <p style="line-height:1.7; font-size:15px; color:var(--text-muted);">Tämän profiilin kautta näet omat aktiiviset turnausilmoittautumisesi, pääset tarkastelemaan live-kaavioita ja voit muokata sovelluksen asetuksia (kuten Dark Modea).</p>
+                    <button id="logout-btn" class="btn btn-secondary" style="width:100%; margin-top:20px; background:#e74c3c; font-weight:700;">Kirjaudu ulos</button>
+                </div>
+            </div>
+
+            <div id="profile-history-content" class="hidden">
+                <div class="card" id="history-list">
+                    <p style="text-align:center; color:var(--text-muted); padding: 20px 0;">Ladataan historiaa...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. TURNAUSSIVU -->
+    <section id="page-turnaus" class="page-section hidden">
+        <div id="tournament-admin-panel" class="card hidden" style="background: rgba(197, 48, 48, 0.08); border: 1.5px solid rgba(197, 48, 48, 0.4); margin-bottom: 20px;">
+            <h3 style="color: #feb2b2; margin-top:0; display:flex; align-items:center; gap:8px;">⚡ Hallintapaneelin pikatyökalut</h3>
+            <p style="font-size: 14px; color: #fc8181; margin-bottom:15px;">Voit muokata otteluiden tuloksia ja hallita pisteitä suoraan tästä reaaliaikaisesta näkymästä.</p>
+            <button class="btn btn-primary" onclick="showView('admin')" style="background:#c53030; font-size:14px; padding:10px 15px; box-shadow:none;">Avaa täysi Hallintapaneeli 🛠️</button>
+        </div>
+
+        <div class="tab-navigation"></div>
+
+        <div id="tournament-page-content" class="card">
+            <p style="text-align: center; color: var(--text-muted); padding: 20px 0;">Ladataan turnauskaavioita...</p>
+        </div>
+    </section>
+
+    <!-- 4. ADMIN HALLINTA -->
+    <section id="page-admin" class="page-section hidden">
+        <h1 style="color: var(--primary-color); text-align: center; margin-bottom: 25px; font-weight: 800; letter-spacing:-0.5px;">LöScaba Admin Hallinta 🛠️</h1>
+        
+        <!-- --- STREAMING_CHUNK: Lisätään Admin-paneeliin Tarkkuusseinän tulostenkirjausosio --- -->
+        <div class="card" style="border-top: 4px solid var(--success-color);">
+            <h3 style="color: var(--success-color); margin-top: 0; font-size: 1.3rem; margin-bottom: 15px;">🎯 Tarkkuusseinä - Tulosten kirjaus</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 15px;">Valitse turnaukseen hyväksytty pelaaja TAI kirjoita vapaa nimi (esim. vieras/katsoja). Syötä tulos ja tallenna se live-taulukkoon.</p>
+            
+            <div class="form-group">
+                <label>Pelaaja (Hyväksytyt osallistujat):</label>
+                <select id="adm-tarkkuus-player">
+                    <option value="">-- Lataa pelaajia... --</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>TAI Vapaa nimi (Vieras/Katsoja):</label>
+                <input type="text" id="adm-tarkkuus-custom" placeholder="Syötä vapaavalintainen nimi">
+            </div>
+
+            <div class="form-group">
+                <label>Tulos / Pisteet:</label>
+                <input type="number" id="adm-tarkkuus-score" placeholder="Pisteet (esim. 45)" min="0" max="1000">
+            </div>
+
+            <button id="adm-save-tarkkuus-btn" class="btn btn-primary" style="background: var(--success-color); width: 100%; padding: 12px;">Tallenna live-tulos 🎯</button>
+
+            <h4 style="margin-top: 20px; margin-bottom: 10px; color: #fff;">Kirjatut live-tulokset (Poistomahdollisuus):</h4>
+            <div style="overflow-x: auto;">
+                <table id="adm-tarkkuus-list-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Nimi</th>
+                            <th>Pisteet</th>
+                            <th>Aika</th>
+                            <th>Poista</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adm-tarkkuus-list-body">
+                        <!-- Tulokset ladataan tähän dynaamisesti -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 25px;">
+            <h3 style="color:var(--primary-color); margin-top:0; font-size:1.3rem; margin-bottom:15px;">1. Hallitse Aktiivista Turnausta</h3>
+            
+            <label class="adm-label">Turnauksen nimi (Suomi):</label>
+            <input type="text" id="adm-name-fi" placeholder="esim. LöScaba Kesä Open 2024" class="adm-input">
+
+            <label class="adm-label">Tournament Name (English):</label>
+            <input type="text" id="adm-name-en" placeholder="esim. LöScaba Summer Open 2024" class="adm-input">
+
+            <label class="adm-label">Turnauksen kuva (URL tai lataa tiedosto):</label>
+            <input type="text" id="adm-image" placeholder="Kuvan URL-osoite" class="adm-input">
+            <input type="file" id="adm-image-file" accept="image/*" style="margin-bottom:15px; font-size:14px; color:var(--text-muted);">
+
+            <div style="display:flex; gap:15px; margin-top:10px;">
+                <div style="flex:1;">
+                    <label class="adm-label">Päivämäärä:</label>
+                    <input type="date" id="adm-date" class="adm-input" style="color-scheme: dark;">
+                </div>
+                <div style="flex:1;">
+                    <label class="adm-label">Alkamisaika (Klo):</label>
+                    <input type="time" id="adm-time" class="adm-input" style="color-scheme: dark;">
+                </div>
+            </div>
+
+            <label class="adm-label">Pelipaikka / Sijainti:</label>
+            <input type="text" id="adm-location" placeholder="esim. Löytis Center, Kenttä 1 & 2" class="adm-input">
+
+            <label class="adm-label">Kuvausteksti / Säännöt (Suomi):</label>
+            <textarea id="adm-desc-fi" placeholder="Kirjoita tähän turnauksen info, aikataulu, säännöt..." class="adm-input auto-resize" rows="4"></textarea>
+
+            <label class="adm-label">Description / Rules (English):</label>
+            <textarea id="adm-desc-en" placeholder="Write tournament details, schedules and rules here..." class="adm-input auto-resize" rows="4"></textarea>
+
+            <button id="adm-publish-btn" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px; margin-top:15px;">Julkaise / Päivitä Turnaus 🚀</button>
+            <button id="adm-del-btn" class="btn btn-secondary hidden" style="width:100%; padding:10px; margin-top:12px; background:#e74c3c;">Poista turnaus (Resetointi) ⚠️</button>
+        </div>
+
+        <div class="card" style="margin-top:25px;">
+            <h3 style="color:var(--primary-color); margin-top:0; font-size:1.3rem; margin-bottom:15px;">2. Odottavat ilmoittautumiset (Live) ⏳</h3>
+            <div style="overflow-x:auto;">
+                <table id="adm-req-table">
+                    <thead>
+                        <tr>
+                            <th>Pelaaja</th>
+                            <th>Kaksinpeli</th>
+                            <th>Nelinpeli</th>
+                            <th>Toiminnot</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:25px; border-top: 4px solid #9b59b6;">
+            <h3 style="color:#9b59b6; margin-top:0; font-size:1.3rem; margin-bottom:15px;">3. Sponsorit & Mainokset (Etusivu) 💰</h3>
+            <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">Voit ladata kaksi erillistä mainosbanneria otsikoineen ja linkkeineen suoraan etusivun alalaitaan.</p>
+            
+            <div style="padding:20px; background:rgba(255, 255, 255, 0.02); border-radius:10px; margin-bottom:20px; border-left:4px solid #9b59b6; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                <h4 style="margin:0 0 10px 0; color:#fff; font-weight:700;">Mainosbanneri 1</h4>
+                <label class="adm-label">Mainoksen otsikko (valinnainen):</label>
+                <input type="text" id="adm-ad1-title" class="adm-input" placeholder="esim. Yhteistyössä Löytis Cafe">
+                <label class="adm-label">Kuva (URL tai lataa tiedosto):</label>
+                <input type="text" id="adm-ad1" class="adm-input" placeholder="Kuvan URL tai lataa alta">
+                <input type="file" id="adm-ad1-file" accept="image/*" style="margin-bottom:12px; font-size:13px; color:var(--text-muted);">
+                <label class="adm-label">Kohdelinkki (URL, esim. https://...):</label>
+                <input type="url" id="adm-ad1-link" class="adm-input" placeholder="https://">
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button id="adm-save-ad1-btn" class="btn btn-primary" style="flex:2; background:#9b59b6; padding:10px;">Tallenna Mainos 1</button>
+                    <button id="adm-del-ad1-btn" class="btn btn-secondary hidden" style="flex:1; background:#e74c3c; padding:10px;">Poista</button>
+                </div>
+            </div>
+
+            <div style="padding:20px; background:rgba(255, 255, 255, 0.02); border-radius:10px; border-left:4px solid #9b59b6; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                <h4 style="margin:0 0 10px 0; color:#fff; font-weight:700;">Mainosbanneri 2</h4>
+                <label class="adm-label">Mainoksen otsikko (valinnainen):</label>
+                <input type="text" id="adm-ad2-title" class="adm-input" placeholder="esim. Välineet myy Badminton Shop">
+                <label class="adm-label">Kuva (URL tai lataa tiedosto):</label>
+                <input type="text" id="adm-ad2" class="adm-input" placeholder="Kuvan URL tai lataa alta">
+                <input type="file" id="adm-ad2-file" accept="image/*" style="margin-bottom:12px; font-size:13px; color:var(--text-muted);">
+                <label class="adm-label">Kohdelinkki (URL, esim. https://...):</label>
+                <input type="url" id="adm-ad2-link" class="adm-input" placeholder="https://">
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button id="adm-save-ad2-btn" class="btn btn-primary" style="flex:2; background:#9b59b6; padding:10px;">Tallenna Mainos 2</button>
+                    <button id="adm-del-ad2-btn" class="btn btn-secondary hidden" style="flex:1; background:#e74c3c; padding:10px;">Poista</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. ASETUKSET -->
+    <section id="page-asetukset" class="page-section hidden">
+        <div class="card">
+            <h2 style="color:var(--primary-color); margin-top:0; font-weight:800; margin-bottom:8px;">Käyttökokemus & Teema</h2>
+            <p style="color:var(--text-muted); font-size:14px; margin-bottom:25px;">Mukauta sovelluksen ulkoasua ja ilmoitusasetuksia mieltymyksiesi mukaan.</p>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid var(--border-color);">
+                <div>
+                    <strong style="display:block; font-size:16px;">Tumma tila (Dark Mode) 🌙</strong>
+                    <span style="font-size:13px; color:var(--text-muted);">Säästää akkua ja silmiä hämärässä.</span>
+                </div>
+                <label class="switch" style="margin-left:auto;">
+                    <input type="checkbox" id="darkmode-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 0; margin-bottom:25px;">
+                <div>
+                    <strong style="display:block; font-size:16px;">Sähköposti-ilmoitukset 📧</strong>
+                    <span style="font-size:13px; color:var(--text-muted);">Saat tiedon, kun ottelusi tulos päivittyy.</span>
+                </div>
+                <label class="switch" style="margin-left:auto;">
+                    <input type="checkbox" id="email-notif-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button id="save-settings-btn" class="btn btn-primary" style="width:100%; padding:14px;">Tallenna asetukset ✓</button>
+        </div>
+
+        <div id="quit-tournament-zone" class="card hidden" style="margin-top:25px; border: 1.5px solid rgba(220, 38, 38, 0.4); background: rgba(220, 38, 38, 0.05);">
+            <h3 style="color:#f87171; margin-top:0; font-weight:700; margin-bottom:10px;">⚠️ Vaarallinen vyöhyke</h3>
+            <p style="font-size:14px; color:#fca5a5; line-height:1.6; margin-bottom:20px;">Olet tällä hetkellä hyväksyttynä mukana aktiivisessa turnauksessa. Jos peruutat osallistumisesi, nimesi poistetaan automaattisesti kaikista lohkoista ja kaavioista välittömästi.</p>
+            <button id="quit-tournament-btn" class="btn" style="background:#dc2626; color:white; width:100%; padding:14px; font-weight:bold; border:none; border-radius:10px; cursor:pointer;">Peruuta osallistuminen turnaukseen</button>
+        </div>
+    </section>
+
+    <!-- 6. TIETOASIVUT -->
+    <section id="page-tietoa" class="page-section hidden">
+        <div class="card" style="margin-bottom: 25px; padding: 20px;">
+            <h4 style="margin: 0 0 10px 0; color: var(--primary-color); font-weight:700;">Sisällysluettelo:</h4>
+            <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 14px;">
+                <li><a href="#pisteytys" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('pisteytys').scrollIntoView({behavior: 'smooth'})">Pisteytys & Ottelumuoto</a></li>
+                <li><a href="#kaavioinfo" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('kaavioinfo').scrollIntoView({behavior: 'smooth'})">Lohkot & Jatkoonpääsy</a></li>
+                <li><a href="#maksut" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('maksut').scrollIntoView({behavior: 'smooth'})">Osallistumismaksu & Edut</a></li>
+                <li><a href="#oheistoiminta" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('oheistoiminta').scrollIntoView({behavior: 'smooth'})">Sivuaktiviteetit & Pelit</a></li>
+                <li><a href="#kentat" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('kentat').scrollIntoView({behavior: 'smooth'})">Kentät & Lämmittely</a></li>
+                <li><a href="#tarjoilu" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('tarjoilu').scrollIntoView({behavior: 'smooth'})">Ruoka- & Juomatarjoilu</a></li>
+                <li><a href="#palkinnot" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('palkinnot').scrollIntoView({behavior: 'smooth'})">Voittopalkinnot</a></li>
+                <li><a href="#tarina" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('tarina').scrollIntoView({behavior: 'smooth'})">LöScaban tarina</a></li>
+                <li><a href="#yhteystiedot" style="color:var(--text-muted); text-decoration:none; font-weight:600;" onclick="event.preventDefault(); document.getElementById('yhteystiedot').scrollIntoView({behavior: 'smooth'})">Yhteystiedot & Tuki</a></li>
+            </ul>
+        </div>
+
+        <div id="pisteytys" class="card info-anchor" style="scroll-margin-top: 85px;">
+            <h3 style="color:var(--primary-color); margin-bottom:12px;">Pisteytys & Ottelumuoto 🏸</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">LöScaba-turnauksessa kaikki ottelut pelataan virallisilla sulkapallosäännöillä, mutta nopeutetussa aikataulussa turnauksen sujuvuuden takaamiseksi:</p>
+            <ul style="padding-left:20px; line-height:1.7; color:var(--text-muted);">
+                <li>Ottelut pelataan <strong>yhteen voitettuun erään 21 pisteeseen</strong> asti (normaali jaksottainen pisteytys, piste jokaisesta pallorallista).</li>
+                <li>Pisteiden ollessa tasan 20-20, peliä jatketaan kunnes syntyy <strong>kahden pisteen ero</strong> (esim. 22-20 tai 24-22).</li>
+                <li>Katto pisteille on kuitenkin <strong>30 pistettä</strong>. Jos tilanne saavuttaa 29-29, seuraavan pisteen saaja (30. piste) voittaa ottelun.</li>
+                <li>Kenttien vaihto suoritetaan lennosta, kun ensimmäinen pelaaja saavuttaa 11 pistettä.</li>
+            </ul>
+        </div>
+
+        <div id="kaavioinfo" class="card info-anchor" style="scroll-margin-top: 85px;">
+            <h3 style="color:var(--primary-color); margin-bottom:12px;">Lohkot & Jatkoonpääsy 📊</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">Turnaus alkaa aina lohkovaiheella, jonka jälkeen siirrytään pudotuspeleihin:</p>
+            <ul style="padding-left:20px; line-height:1.7; color:var(--text-muted);">
+                <li><strong>Lohkovaihe:</strong> Pelaajat jaetaan 3–5 pelaajan lohkoihin (riippuen osallistujamäärästä). Lohkossa kaikki pelaavat kaikkia vastaan (Round Robin).</li>
+                <li><strong>Jatkoonpääsy:</strong> Jokaisen lohkon kaksi parasta pelaajaa etenee suoraan A-finaalikaavioon (pudotuspelit).</li>
+                <li><strong>Sijoitukset tasapisteissä:</strong> Jos pelaajat ovat tasapisteissä lohkovaiheen päättyessä, sijoituksen ratkaisee keskinäinen ottelu, erotus tai arvonta.</li>
+            </ul>
+        </div>
+
+        <div id="maksut" class="card info-anchor" style="scroll-margin-top: 85px;">
+            <h3 style="color:var(--primary-color); margin-bottom:12px;">Osallistumismaksu & Edut 💳</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">LöScaba on voittoa tavoittelematon yhteisöturnaus, ja osallistumismaksu käytetään lyhentämättömänä kisakulujen kattamiseen:</p>
+            <ul style="padding-left:20px; line-height:1.7; color:var(--text-muted);">
+                <li><strong>Hinta:</strong> Osallistumismaksu on <strong>15 € / pelaaja</strong> (kattaa sekä kaksinpelin että nelinpelin).</li>
+                <li><strong>Maksutapa:</strong> MobilePay numeroon <code>12345</code> (omalla nimellä ja viitteellä "LöScaba").</li>
+                <li><strong>Mitä maksu sisältää?</strong> Kenttävuorot, aitosulkaiset kisasulat järjestäjän puolesta, juomia, eväitä sekä upeita pokaaleja.</li>
+            </ul>
+        </div>
+
+        <div id="oheistoiminta" class="card info-anchor" style="scroll-margin-top: 85px;">
+            <h3 style="color:var(--primary-color); margin-bottom:12px;">Sivuaktiviteetit & Pelit 🎮</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">Pelien välissä ei tarvitse nököttää toimettomana! Kisa-alueelta löytyy monenlaista viihdykettä pelaajille ja katsojille:</p>
+            <ul style="padding-left:20px; line-height:1.7; color:var(--text-muted);">
+                <li><strong>Smash-minipeli:</strong> Voit haastaa kaverisi digitaaliseen sulkapallopeliin suoraan tämän sovelluksen Smash-sivulta! Parhaat pelaajat palkitaan päivän päätteeksi.</li>
+                <li><strong>Tarkkuussyöttökisa:</strong> Kentän reunalla on käynnissä jatkuva haaste, jossa syötetään sulkia pistelaatikoihin.</li>
+            </ul>
+        </div>
+
+        <div id="kentat" class="card info-anchor" style="scroll-margin-top: 85px;">
+            <h3 style="color:var(--primary-color); margin-bottom:12px;">Kentät & Lämmittely 🗺️</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">Ottelut pelataan virallisilla mattoalustoilla varustetuilla sulkapallokentillä:</p>
+            <ul style="padding-left:20px; line-height:1.7; color:var(--text-muted);">
+                <li>Käytössämme on yhteensä 4 varattua kenttää. Kenttien numerot (1-4) näkyvät live-kaavioissa ottelun kohdalla.</li>
+                <li><strong>Lämmittely:</strong> Ennen ottelun alkua pelaajilla on tasan <strong>3 minuuttia</strong> aikaa lyödä palloja kentällä kelloa vastaan.</li>
+            </ul>
+        </div>
+
+        <div id="tarjoilu" class="card info-anchor" style="scroll-margin-top: 85px;">
+            <h3 style="color:var(--primary-color); margin-bottom:12px;">Ruoka- & Juomatarjoilu 🍌</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">Energian saanti on huippusuorituksen tae. Järjestäjät huolehtivat, että virtaa riittää koko päiväksi:</p>
+            <ul style="padding-left:20px; line-height:1.7; color:var(--text-muted);">
+                <li><strong>Ilmainen energiapöytä:</strong> Kaikille pelaajille vapaassa käytössä banaaneja, suolapähkinöitä sekä rusinoita.</li>
+                <li><strong>Kahvipiste:</strong> Lämmitä kuppi kuumaa kahvia tai teetä milloin vain – tietysti pienen makean kera.</li>
+            </ul>
+        </div>
+
+        <div id="palkinnot" class="card info-anchor" style="scroll-margin-top: 85px;">
+            <h3 style="color:var(--primary-color); margin-bottom:12px;">Voittopalkinnot 🏆</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">Maine ja kunnia ovat tärkeimpiä, mutta kukaan ei poistu palkintopallilta tyhjin käsin:</p>
+            <ul style="padding-left:20px; line-height:1.7; color:var(--text-muted);">
+                <li><strong>A-sarjan voittaja:</strong> Historian suurin kiertopokaali, LöScaba-mitali sekä lahjakortti urheiluliikkeeseen.</li>
+                <li><strong>Sijat 2. ja 3.</strong> LöScaba-mitalit sekä varustepaketteja (sulkia, grippejä, urheilupyyhkeitä).</li>
+            </ul>
+        </div>
+
+        <div id="tarina" class="card info-anchor" style="border-top: 4px solid #16a085; scroll-margin-top: 85px;">
+            <h3 style="color:#16a085; margin-bottom:12px;">LöScaban tarina 📖</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:12px;">LöScaba sai alkunsa kesällä 2021, kun ryhmä intohimoisia harrastajia kyllästyi virallisten kisojen pitkiin välimatkoihin ja ryppyotsaisuuteen. Päätettiin perustaa oma, rento mutta kilpailuhenkinen turnaus, jossa nauru raikaa, mutta jokaisesta pisteestä taistellaan hampaat irvessä.</p>
+            <p style="line-height:1.7; color:var(--text-muted);">Ensimmäisessä turnauksessa takapihalla oli mukana vain 6 pelaajaa, mutta suuren suosion ja huikean yhteishengen ansiosta LöScaba on kasvanut vuosi vuodelta. Tervetuloa mukaan osaksi tarinaa!</p>
+        </div>
+
+        <div id="yhteystiedot" class="card info-anchor" style="border-top: 4px solid #2980b9; scroll-margin-top: 85px;">
+            <h3 style="color:#2980b9; margin-bottom:12px;">Yhteystiedot & Tuki 📞</h3>
+            <p style="line-height:1.7; color:var(--text-muted); margin-bottom:15px;">Onko sinulla kysyttävää säännöistä, aikatauluista tai järjestelyistä? Ota rohkeasti yhteyttä kisaorganisaatioon:</p>
+            <ul style="list-style:none; padding-left:0; line-height:1.8; color:var(--text-muted);">
+                <li>📢 <strong>Pääjärjestäjä:</strong> Teemu Pelaaja</li>
+                <li>📧 <strong>Sähköposti:</strong> <a href="mailto:info@loscaba.fi" style="color:var(--primary-color); text-decoration:none;">info@loscaba.fi</a></li>
+                <li>📍 <strong>Kisapaikka:</strong> Löytis Sulkapallohalli, Urheilutie 10, Helsinki</li>
+            </ul>
+            <p style="font-size:13px; opacity:0.6; text-align:center; margin-top:30px;">LöScaba App v2.5.0 © 2026 - Kaikki oikeudet pidätetään.</p>
+        </div>
+    </section>
+
+    <!-- 7. MINIPELI & LIVE-TARKKUUSSEINÄ DASHBOARD -->
+    <!-- --- STREAMING_CHUNK: Rakennetaan uusi tabitettu peli/tapahtumasivu --- -->
+    <section id="page-peli" class="page-section hidden">
+        <div class="profile-tabs" style="display:flex; border-bottom:1px solid var(--border-color); margin-bottom: 25px;">
+            <button id="tab-smash-btn" class="tab-link active" style="flex:1; padding:15px; background:none; border:none; font-weight:bold; cursor:pointer; color:var(--text-color); border-bottom:3px solid var(--primary-color); font-size:1rem; outline:none; transition:all 0.2s;">Smash Peli 🎮</button>
+            <button id="tab-accuracy-btn" class="tab-link" style="flex:1; padding:15px; background:none; border:none; font-weight:bold; cursor:pointer; color:var(--text-muted); font-size:1rem; outline:none; transition:all 0.2s;">Live-Tarkkuusseinä 🎯</button>
+        </div>
+
+        <!-- VÄLILEHTI 1: SMASH DIGITAALINEN MINI-PELI -->
+        <div id="smash-game-content">
+            <div class="card" style="text-align: center; max-width: 500px; margin: 0 auto; padding: 20px;">
+                <h2 style="color: var(--primary-color); margin-top: 0; font-weight:800; margin-bottom:8px;">LöScaba Smash</h2>
+                <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px; color:var(--text-muted);">Suojele kenttää – liikuta mailaa ja ota sulat kiinni ennen lattiaa!</p>
+                
+                <div id="game-container">
+                    <div id="score-board">Pisteet: <span id="score">0</span></div>
+                    
+                    <!-- Dynaaminen neon-vastustajahahmo tehty SVG-grafiikalla virheettömän toiminnan takaamiseksi -->
+                    <div id="opponent-container">
+                        <svg width="80" height="80" viewBox="0 0 100 100">
+                            <circle cx="50" cy="30" r="18" fill="none" stroke="#e622d2" stroke-width="4" filter="drop-shadow(0 0 4px #e622d2)"/>
+                            <path d="M50 48 L50 80 M50 55 L20 70 M50 55 L80 70" stroke="#e622d2" stroke-width="4" stroke-linecap="round" filter="drop-shadow(0 0 4px #e622d2)"/>
+                            <circle cx="44" cy="26" r="2.5" fill="#e622d2"/>
+                            <circle cx="56" cy="26" r="2.5" fill="#e622d2"/>
+                            <path d="M42 38 Q50 32 58 38" stroke="#e622d2" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+
+                    <div id="racket"></div>
+
+                    <div id="game-over-screen">
+                        <h2 style="color: var(--danger-color); margin-bottom: 5px; font-weight: 800;">Peli päättyi!</h2>
+                        <p id="final-score" style="font-size: 20px; margin-bottom: 20px; font-weight: bold; color: #fff;">Pisteesi: 0</p>
+                        <button id="start-game-btn" class="btn btn-primary" style="padding: 12px 30px; font-size: 1.1rem; border-radius: 25px;">Pelaa 🚀</button>
+                        <p class="instructions">Liikuta mailaa hiirellä tai sormella sivusuunnassa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VÄLILEHTI 2: LIVE TARKKUUSSEINÄ LEADERBOARD -->
+        <!-- --- STREAMING_CHUNK: Rakennetaan live-tarkkuusseinän reaaliaikainen taulukko --- -->
+        <div id="accuracy-wall-content" class="hidden">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 3rem;">🎯</span>
+                    <h2 style="color: var(--primary-color); font-weight: 800; margin-top: 10px;">Live-Tarkkuusseinä</h2>
+                    <p style="color: var(--text-muted); font-size: 14px;">Kisapaikan virallinen heitto- ja tarkkuussyöttöpeli. Seuraa tilannetta ja tuloksia reaaliajassa!</p>
+                </div>
+
+                <div id="tarkkuus-leaderboard-container">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%; text-align: center;">Sija</th>
+                                <th style="width: 55%;">Pelaaja</th>
+                                <th style="width: 30%; text-align: right;">Pisteet</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tarkkuus-leaderboard-body">
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 30px 0;">Ladataan live-tuloksia... ⏳</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- CORE SPA SCRIPT & FIREBASE LOGIC --- -->
+    <script>
+        /*******************************************************************************
+         * 1. ALUSTUS, FIREBASE & GLOBAALIT MUUTTUJAT
+         *******************************************************************************/
+        const firebaseConfig = {
+          apiKey: "AIzaSyA3mlwqFf-hk6_vlk6GMo8bXanmC1MaIqU",
+          authDomain: "loscaba-81da2.firebaseapp.com",
+          projectId: "loscaba-81da2",
+          storageBucket: "loscaba-81da2.firebasestorage.app",
+          messagingSenderId: "291152980965",
+          appId: "1:291152980965:web:606b9a6c99c8f753b59d0c",
+          measurementId: "G-C6VX2Q9RPE"
+        };
+
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'loscaba-81da2';
+
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('./sw.js').catch(err => console.log("SW Error", err));
+        }
+
+        let currentUser = null;
+        let currentLang = localStorage.getItem('loscaba_lang') || 'fi';
+
+        /*******************************************************************************
+         * 2. SPA NAVIGATION ENGINE (REITITYS)
+         *******************************************************************************/
+        window.showView = function(viewId, anchorId = null) {
+          const views = ['index', 'profiili', 'turnaus', 'admin', 'asetukset', 'tietoa', 'peli'];
+          
+          views.forEach(v => {
+            const el = document.getElementById('page-' + v);
+            if (el) {
+              if (v === viewId) {
+                el.classList.remove('hidden');
+              } else {
+                el.classList.add('hidden');
+              }
+            }
+          });
+
+          // Sulje sivupalkki jos se on auki
+          const sidebar = document.getElementById('sidebar');
+          const overlay = document.getElementById('overlay');
+          if (sidebar && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+          }
+
+          // Käsittele sisäinen ankkurointi tietoa-osiossa
+          if (anchorId) {
+            setTimeout(() => {
+              const anchorEl = document.getElementById(anchorId);
+              if (anchorEl) {
+                anchorEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 150);
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+
+          // Lopetetaan peli jos poistutaan pelisivulta
+          if (viewId !== 'peli' && typeof stopActiveGame === 'function') {
+            stopActiveGame();
+          }
+
+          // Päivitä aktiivinen tila sivupalkin painikkeissa
+          document.querySelectorAll('.sidebar-menu a').forEach(a => {
+            a.classList.remove('active');
+            const onClickAttr = a.getAttribute('onclick');
+            if (onClickAttr && onClickAttr.includes(`'${viewId}'`)) {
+              a.classList.add('active');
+            }
+          });
+        };
+
+        /*******************************************************************************
+         * 3. NAVIGOINTI & KÄYTTÖLIITTYMÄKOMPONENTIT
+         *******************************************************************************/
+        function buildUIComponents() {
+          const navPlaceholder = document.getElementById('navbar-placeholder');
+          const sidePlaceholder = document.getElementById('sidebar-placeholder');
+
+          if (navPlaceholder) {
+            navPlaceholder.innerHTML = `
+              <header class="navbar">
+                <div class="nav-left">
+                  <button id="menu-btn" class="menu-btn">☰</button>
+                  <div class="logo" onclick="showView('index')">LöScaba</div>
+                </div>
+                <div class="nav-right">
+                  <button id="lang-btn" class="lang-btn">${currentLang === 'fi' ? 'EN' : 'FI'}</button>
+                  <button id="profile-btn" class="profile-nav-btn" onclick="showView('profiili')">Kirjaudu</button>
+                </div>
+              </header>
+            `;
+          }
+
+          if (sidePlaceholder) {
+            sidePlaceholder.innerHTML = `
+              <div id="sidebar" class="sidebar">
+                <div class="sidebar-brand">LöScaba Menu</div>
+                <ul class="sidebar-menu">
+                  <li><a onclick="showView('index')" class="active">Etusivu</a></li>
+                  <li>
+                    <button class="dropdown-btn">Tietoa kisoista <span class="arrow">▼</span></button>
+                    <ul class="dropdown-container">
+                      <li><a onclick="showView('tietoa', 'pisteytys')">Pisteytys</a></li>
+                      <li><a onclick="showView('tietoa', 'kaavioinfo')">Lohkot & Kaaviot</a></li>
+                      <li><a onclick="showView('tietoa', 'maksut')">Osallistumismaksu</a></li>
+                      <li><a onclick="showView('tietoa', 'oheistoiminta')">Sivuaktiviteetit</a></li>
+                      <li><a onclick="showView('tietoa', 'kentat')">Kentät</a></li>
+                      <li><a onclick="showView('tietoa', 'tarjoilu')">Ruoka & Juoma</a></li>
+                      <li><a onclick="showView('tietoa', 'palkinnot')">Voittopalkinnot</a></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <button class="dropdown-btn">Tietoa meistä <span class="arrow">▼</span></button>
+                    <ul class="dropdown-container">
+                      <li><a onclick="showView('tietoa', 'tarina')">LöScaban tarina</a></li>
+                      <li><a onclick="showView('tietoa', 'yhteystiedot')">Yhteystiedot</a></li>
+                    </ul>
+                  </li>
+                  <li id="game"><a onclick="showView('peli')">Pelit & Tarkkuusseinä 🎮</a></li>
+                  <li id="menu-tour-item" class="hidden"><a onclick="showView('turnaus')">Turnaussivu 🏸</a></li>
+                  <li id="menu-admin-item" class="hidden"><a onclick="showView('admin')" style="color: #ff0080; font-weight: bold;">Hallinta Paneeli</a></li>
+                  <li><a onclick="showView('asetukset')">Asetukset</a></li>
+                  
+                  <li id="pwa-install-item" style="list-style: none;">
+                    <button id="pwa-install-btn" style="display: block; width: calc(100% - 40px); background: #e67e22; color: white; margin: 15px auto; padding: 10px; border-radius: 4px; text-align: center; border: none; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer;">
+                      Asenna sovellus 📱
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div id="overlay" class="overlay"></div>
+            `;
+          }
+
+          bindComponentEvents();
+          setupPWAInstallation();
+        }
+
+        function bindComponentEvents() {
+          const menuBtn = document.getElementById('menu-btn');
+          const sidebar = document.getElementById('sidebar');
+          const overlay = document.getElementById('overlay');
+          const langBtn = document.getElementById('lang-btn');
+
+          if (menuBtn && sidebar && overlay) {
+            const toggle = () => { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); };
+            menuBtn.addEventListener('click', toggle);
+            overlay.addEventListener('click', toggle);
+          }
+
+          document.querySelectorAll('.dropdown-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+              e.preventDefault();
+              this.classList.toggle('open-menu');
+              const container = this.nextElementSibling;
+              if (container) { container.classList.toggle('show'); }
+            });
+          });
+
+          if (langBtn) {
+            langBtn.addEventListener('click', () => {
+              currentLang = currentLang === 'fi' ? 'en' : 'fi';
+              localStorage.setItem('loscaba_lang', currentLang);
+              window.location.reload();
+            });
+          }
+        }
+
+        /*******************************************************************************
+         * 3. AUTH STATE CHANGED & SIVUJEN ALUSTUSOHJAUS
+         *******************************************************************************/
+        auth.onAuthStateChanged(user => {
+          const menuTour = document.getElementById('menu-tour-item');
+          const menuAdmin = document.getElementById('menu-admin-item');
+          const profileBtn = document.getElementById('profile-btn');
+
+          if (user) {
+            db.collection("users").doc(user.uid).get().then(doc => {
+              if (doc.exists) {
+                currentUser = doc.data();
+                currentUser.uid = user.uid;
+                
+                if (currentUser.theme === 'dark') document.body.classList.add('dark-mode');
+                if (profileBtn) profileBtn.innerText = `${currentUser.firstname}`;
+
+                if (currentUser.role === 'admin') {
+                  if (menuAdmin) menuAdmin.classList.remove('hidden');
+                  if (menuTour) menuTour.classList.remove('hidden');
+                } else {
+                  if (menuAdmin) menuAdmin.classList.add('hidden');
+                }
+
+                if (currentUser.role !== 'admin') {
+                  db.collection("tournaments").doc("active").collection("participants").doc(currentUser.uid).onSnapshot(pDoc => {
+                    if (pDoc.exists && pDoc.data().status === 'approved') {
+                      if (menuTour) menuTour.classList.remove('hidden');
+                    } else {
+                      if (menuTour) menuTour.classList.add('hidden');
+                    }
+                    if (typeof checkUserRegistration === 'function') checkUserRegistration();
+                  });
+                }
+
+                if (typeof initProfilePage === 'function') initProfilePage();
+                if (typeof initTournamentPage === 'function') initTournamentPage();
+                if (typeof initAdminPage === 'function') initAdminPage();
+                if (typeof initAsetuksetPage === 'function') initAsetuksetPage();
+                if (typeof initHomePage === 'function') initHomePage();
+              }
+            });
+          } else {
+            currentUser = null;
+            if (profileBtn) profileBtn.innerText = currentLang === 'fi' ? "Kirjaudu" : "Login";
+            if (menuTour) menuTour.classList.add('hidden');
+            if (menuAdmin) menuAdmin.classList.add('hidden');
+            if (typeof initProfilePage === 'function') initProfilePage();
+            if (typeof initHomePage === 'function') initHomePage();
+          }
+        });
+
+        document.addEventListener('DOMContentLoaded', buildUIComponents);
+
+        /*******************************************************************************
+         * 4. PWA-ASENNUSLOGIIKKA
+         *******************************************************************************/
+        let deferredPrompt = null;
+
+        function isRunningInPWA() {
+          return window.matchMedia('(display-mode: standalone)').matches 
+              || window.navigator.standalone 
+              || document.referrer.includes('android-app://');
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          
+          const installBtn = document.getElementById('pwa-install-btn');
+          if (installBtn && !isRunningInPWA()) {
+            installBtn.style.display = 'block';
+            installBtn.style.background = '#8c008c';
+            installBtn.innerText = 'Asenna sovellus 📱';
+          }
+        });
+
+        function setupPWAInstallation() {
+          const installBtn = document.getElementById('pwa-install-btn');
+          if (!installBtn) return;
+
+          if (isRunningInPWA()) {
+            installBtn.style.display = 'none';
+            return;
+          }
+
+          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+          if (isIOS) {
+            installBtn.style.display = 'block';
+            installBtn.innerText = 'Asennusohjeet (iOS) 📱';
+          }
+
+          installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+              deferredPrompt.prompt();
+              
+              const { outcome } = await deferredPrompt.userChoice;
+              console.log(`Käyttäjän valinta: ${outcome}`);
+              
+              if (outcome === 'accepted') {
+                deferredPrompt = null;
+                installBtn.style.background = '#2ecc71';
+                installBtn.innerText = 'Asennetaan... ✓';
+                setTimeout(() => { installBtn.style.display = 'none'; }, 2000);
+              }
+            } 
+            else if (isIOS) {
+              alert("Asenna LöScaba iPhonellesi:\n\n1. Paina Safarin alareunasta 'Jaa'-painetta.\n2. Valitse valikosta 'Lisää koti-valikkoon' (Add to Home Screen).\n3. Paina 'Lisää' oikeasta yläkulmasta.");
+            } 
+            else {
+              alert("LöScaba on valmis ladattavaksi! Voit asentaa sen suoraan selaimen asetuksista.");
+            }
+          });
+
+          window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            installBtn.style.background = '#2ecc71';
+            installBtn.innerText = 'Sovellus asennettu! ✓';
+            setTimeout(() => { installBtn.style.display = 'none'; }, 1500);
+          });
+        }
+
+        /*******************************************************************************
+         * 5. ETUSIVU (Lohko ja Mainokset)
+         *******************************************************************************/
+        function initHomePage() {
+          db.collection("tournaments").doc("active").onSnapshot(doc => {
+            const container = document.getElementById('home-tournament-container');
+            const adsContainer = document.getElementById('home-ads-container');
+            
+            if (!container) return;
+
+            // DYNAAMINEN TURNAUSPAIKKA - Piilotetaan kokonaan jos julkaisematon
+            if (doc.exists && doc.data().published) {
+              container.classList.remove('hidden');
+              const tour = doc.data();
+              const title = currentLang === 'fi' ? tour.nameFi : tour.nameEn;
+              const desc = currentLang === 'fi' ? tour.descFi : tour.descEn;
+              
+              const pvm = tour.date ? tour.date : 'Ei ilmoitettu';
+              const aika = tour.time ? tour.time : 'Ei ilmoitettu';
+              const paikka = tour.location ? tour.location : 'Ei ilmoitettu';
+
+              container.innerHTML = `
+                <div class="card">
+                  <img src="${tour.image}" style="width:100%; height:240px; object-fit:cover; border-radius:12px; margin-bottom:15px; border: 1px solid var(--border-color);">
+                  <h2 style="color:var(--primary-color); font-size:1.8rem; margin-bottom:10px; font-weight:800; letter-spacing:-0.5px;">${title}</h2>
+                  
+                  <div class="tournament-info-bar" style="margin: 15px 0; padding: 15px; background: rgba(230, 34, 210, 0.04); border-left: 4px solid var(--primary-color); border-radius: 8px; font-size: 15px; line-height: 1.6; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                    📍 <strong>Sijainti:</strong> ${paikka} <br>
+                    📅 <strong>Päivämäärä:</strong> ${pvm} | ⏰ <strong>Klo:</strong> ${aika}
+                  </div>
+
+                  <p style="margin: 15px 0; line-height:1.7; white-space: pre-wrap; color: var(--text-muted);">${desc}</p>
+                  <div id="registration-zone" style="margin-top:20px;">
+                    <button id="home-join-btn" class="btn btn-primary" style="width:100%; padding:14px; font-weight:700;">Ilmoittaudu kisaan mukaan</button>
+                  </div>
+                </div>
+              `;
+
+              const joinBtn = document.getElementById('home-join-btn');
+              if (joinBtn) joinBtn.addEventListener('click', avaaIlmoittautuminen);
+              checkUserRegistration();
+            } else {
+              container.innerHTML = ``;
+              container.classList.add('hidden');
+            }
+
+            if (adsContainer) {
+              adsContainer.innerHTML = '';
+              if (doc.exists) {
+                const d = doc.data();
+                let adsHtml = '';
+                
+                if (d.ad1) {
+                  const otsikko1 = d.ad1Title ? `<h4 style="margin-bottom:12px; color:var(--primary-color); font-weight:700; text-align:left;">${d.ad1Title}</h4>` : '';
+                  let ad1Content = `${otsikko1}<img src="${d.ad1}" alt="Mainos 1" style="width:100%; border-radius:10px; display:block; object-fit:contain; max-height:280px; border: 1px solid var(--border-color);">`;
+                  
+                  if (d.ad1Link) {
+                    adsHtml += `<div class="card ad-box" style="padding:18px;"><a href="${d.ad1Link}" target="_blank" style="text-decoration:none; color:inherit;">${ad1Content}</a></div>`;
+                  } else {
+                    adsHtml += `<div class="card ad-box" style="padding:18px;">${ad1Content}</div>`;
+                  }
+                }
+                
+                if (d.ad2) {
+                  const otsikko2 = d.ad2Title ? `<h4 style="margin-bottom:12px; color:var(--primary-color); font-weight:700; text-align:left;">${d.ad2Title}</h4>` : '';
+                  let ad2Content = `${otsikko2}<img src="${d.ad2}" alt="Mainos 2" style="width:100%; border-radius:10px; display:block; object-fit:contain; max-height:280px; border: 1px solid var(--border-color);">`;
+                  
+                  if (d.ad2Link) {
+                    adsHtml += `<div class="card ad-box" style="padding:18px;"><a href="${d.ad2Link}" target="_blank" style="text-decoration:none; color:inherit;">${ad2Content}</a></div>`;
+                  } else {
+                    adsHtml += `<div class="card ad-box" style="padding:18px;">${ad2Content}</div>`;
+                  }
+                }
+
+                if(adsHtml) {
+                  adsContainer.innerHTML = `<h3 style="color:#fff; margin-bottom:15px; font-weight:700; font-size:1.2rem;">Yhteistyökumppanit & Sponsorit</h3><div class="ads-grid">${adsHtml}</div>`;
+                }
+              }
+            }
+          });
+        }
+
+        function avaaIlmoittautuminen() {
+          if (!currentUser) {
+            alert("Sinun täytyy kirjautua sisään ilmoittautuaksesi!");
+            showView('profiili');
+            return;
+          }
+          const modal = document.getElementById('join-modal');
+          if (modal) modal.classList.remove('hidden');
+        }
+
+        function checkUserRegistration() {
+          if (!currentUser) return;
+          db.collection("tournaments").doc("active").collection("participants").doc(currentUser.uid).onSnapshot(doc => {
+            const zone = document.getElementById('registration-zone');
+            if (!zone) return;
+            if (doc.exists) {
+              const status = doc.data().status;
+              if (status === 'pending') {
+                zone.innerHTML = `<div class="badge" style="display:block; text-align:center; padding:12px; font-size:1rem; background:var(--warning-color); border-radius:10px;">Ilmoittautuminen odottaa hyväksyntää... ⏳</div>`;
+              } else if (status === 'approved') {
+                zone.innerHTML = `<button class="btn btn-primary" style="width:100%; background:var(--success-color); border:none;" onclick="showView('turnaus')">Näytä turnauskaavio 🏸</button>`;
+              } else if (status === 'rejected') {
+                zone.innerHTML = `<div class="badge" style="display:block; text-align:center; padding:12px; font-size:1rem; background:var(--danger-color); border-radius:10px;">Ilmoittautuminen hylätty.</div>`;
+              }
+            }
+          });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const closeBtn = document.getElementById('close-modal-btn');
+          const confirmBtn = document.getElementById('confirm-join-btn');
+          if (closeBtn) closeBtn.addEventListener('click', () => document.getElementById('join-modal').classList.add('hidden'));
+          if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => {
+              if (!currentUser) return;
+              db.collection("tournaments").doc("active").collection("participants").doc(currentUser.uid).set({
+                name: `${currentUser.firstname} ${currentUser.lastname}`,
+                singles: document.getElementById('modal-singles').value,
+                pClass: document.getElementById('modal-class').value,
+                doubles: document.getElementById('modal-doubles').value,
+                status: 'pending'
+              }).then(() => {
+                document.getElementById('join-modal').classList.add('hidden');
+                alert("Ilmoittautumispyyntö lähetetty onnistuneesti!");
+              });
+            });
+          }
+        });
+
+        /*******************************************************************************
+         * 6. PROFIILISIVU
+         *******************************************************************************/
+        function initProfilePage() {
+          const authSec = document.getElementById('auth-section');
+          const profSec = document.getElementById('profile-section');
+
+          if (!currentUser) {
+            if (authSec) authSec.classList.remove('hidden');
+            if (profSec) profSec.classList.add('hidden');
+          } else {
+            if (authSec) authSec.classList.add('hidden');
+            if (profSec) {
+              profSec.classList.remove('hidden');
+              document.getElementById('profile-name').innerText = `${currentUser.firstname} ${currentUser.lastname}`;
+              document.getElementById('profile-email-view').innerText = `Tili: ${currentUser.email}`;
+              document.getElementById('role-badge').innerText = currentUser.role.toUpperCase();
+              
+              loadTournamentHistory();
+            }
+          }
+        }
+
+        function loadTournamentHistory() {
+          const historyList = document.getElementById('history-list');
+          if (!historyList) return;
+
+          db.collection("tournaments")
+            .where("status", "==", "finished")
+            .get()
+            .then(snapshot => {
+              if (snapshot.empty) {
+                historyList.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 20px 0;">Ei aiempia turnauksia.</p>`;
+                return;
+              }
+
+              let html = '<table><thead><tr><th>Turnaus</th><th>Päivämäärä</th><th>Kaavio</th></tr></thead><tbody>';
+              let hasTournaments = false;
+
+              snapshot.forEach(doc => {
+                const data = doc.data();
+                html += `
+                  <tr>
+                    <td><strong>${data.name || 'Nimetön turnaus'}</strong></td>
+                    <td>${data.date || 'Ei pvm'}</td>
+                    <td>
+                      <button onclick="showView('turnaus')" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; text-decoration: none;">
+                        Katso kaavio
+                      </button>
+                    </td>
+                  </tr>
+                `;
+                hasTournaments = true;
+              });
+
+              html += '</tbody></table>';
+              historyList.innerHTML = hasTournaments ? html : `<p style="text-align: center; color:var(--text-muted); padding: 20px 0;">Ei aiempia turnauksia.</p>`;
+            })
+            .catch(err => {
+              console.error("Virhe historian latauksessa:", err);
+              historyList.innerHTML = `<p style="text-align: center; color: var(--danger-color); padding: 20px 0;">Virhe ladattaessa historiaa.</p>`;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const toReg = document.getElementById('go-to-register');
+          const toLog = document.getElementById('go-to-login');
+          
+          if (toReg) toReg.addEventListener('click', () => {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('register-box').classList.remove('hidden');
+          });
+          if (toLog) toLog.addEventListener('click', () => {
+            document.getElementById('register-box').classList.add('hidden');
+            document.getElementById('login-box').classList.remove('hidden');
+          });
+
+          const tabInfoBtn = document.getElementById('tab-info-btn');
+          const tabHistoryBtn = document.getElementById('tab-history-btn');
+          const infoContent = document.getElementById('profile-info-content');
+          const historyContent = document.getElementById('profile-history-content');
+
+          if (tabInfoBtn && tabHistoryBtn) {
+            tabInfoBtn.addEventListener('click', () => {
+              tabInfoBtn.classList.add('active');
+              tabHistoryBtn.classList.remove('active');
+              tabInfoBtn.style.borderBottom = "3px solid var(--primary-color)";
+              tabHistoryBtn.style.borderBottom = "none";
+              tabInfoBtn.style.color = "var(--text-color)";
+              tabHistoryBtn.style.color = "var(--text-muted)";
+              infoContent.classList.remove('hidden');
+              historyContent.classList.add('hidden');
+            });
+
+            tabHistoryBtn.addEventListener('click', () => {
+              tabHistoryBtn.classList.add('active');
+              tabInfoBtn.classList.remove('active');
+              tabHistoryBtn.style.borderBottom = "3px solid var(--primary-color)";
+              tabInfoBtn.style.borderBottom = "none";
+              tabHistoryBtn.style.color = "var(--text-color)";
+              tabInfoBtn.style.color = "var(--text-muted)";
+              historyContent.classList.remove('hidden');
+              infoContent.classList.add('hidden');
+            });
+          }
+
+          if (document.getElementById('submit-login')) {
+            document.getElementById('submit-login').addEventListener('click', () => {
+              auth.signInWithEmailAndPassword(document.getElementById('login-email').value.trim(), document.getElementById('login-password').value).catch(err => alert(err.message));
+            });
+          }
+
+          if (document.getElementById('submit-register')) {
+            document.getElementById('submit-register').addEventListener('click', () => {
+              const firstname = document.getElementById('reg-firstname').value.trim();
+              const lastname = document.getElementById('reg-lastname').value.trim();
+              const email = document.getElementById('reg-email').value.trim();
+              auth.createUserWithEmailAndPassword(email, document.getElementById('reg-password').value).then(cred => {
+                return db.collection("users").doc(cred.user.uid).set({ firstname, lastname, email, role: "user", group: "asiakas", theme: "light", emailNotification: false });
+              }).catch(err => alert(err.message));
+            });
+          }
+
+          if (document.getElementById('logout-btn')) {
+            document.getElementById('logout-btn').addEventListener('click', () => {
+              auth.signOut().then(() => showView('index'));
+            });
+          }
+
+          function handleGoogleLogin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+              .then(cred => {
+                const userDocRef = db.collection("users").doc(cred.user.uid);
+                return userDocRef.get().then(doc => {
+                  if (!doc.exists) {
+                    const displayName = cred.user.displayName || "";
+                    const nameParts = displayName.split(" ");
+                    const firstname = nameParts[0] || "Google";
+                    const lastname = nameParts.slice(1).join(" ") || "Käyttäjä";
+                    const email = cred.user.email || "";
+
+                    return userDocRef.set({
+                      firstname: firstname,
+                      lastname: lastname,
+                      email: email,
+                      role: "user",
+                      group: "asiakas",
+                      theme: "light",
+                      emailNotification: false
+                    });
+                  }
+                });
+              })
+              .catch(err => {
+                console.error("Google-kirjautumisvirhe: ", err);
+                alert("Google-kirjautuminen epäonnistui: " + err.message);
+              });
+          }
+
+          const googleLoginBtn = document.getElementById('google-login');
+          const googleRegBtn = document.getElementById('google-reg');
+
+          if (googleLoginBtn) { googleLoginBtn.addEventListener('click', handleGoogleLogin); }
+          if (googleRegBtn) { googleRegBtn.addEventListener('click', handleGoogleLogin); }
+        });
+
+        /*******************************************************************************
+         * 7. ADMIN PANEELI & TARKKUUSSEINÄ TALLENNUS
+         *******************************************************************************/
+        function initAdminPage() {
+          if (!currentUser || currentUser.role !== 'admin') {
+             return;
+          }
+
+          document.querySelectorAll('textarea.auto-resize').forEach(textarea => {
+            textarea.addEventListener('input', autoResizeTextarea);
+          });
+
+          db.collection("tournaments").doc("active").onSnapshot(doc => {
+            const delBtn = document.getElementById('adm-del-btn');
+            const delAd1Btn = document.getElementById('adm-del-ad1-btn');
+            const delAd2Btn = document.getElementById('adm-del-ad2-btn');
+
+            if (doc.exists) {
+              const d = doc.data();
+              
+              if(d.published && delBtn) delBtn.classList.remove('hidden');
+
+              if(document.getElementById('adm-name-fi')) document.getElementById('adm-name-fi').value = d.nameFi || '';
+              if(document.getElementById('adm-name-en')) document.getElementById('adm-name-en').value = d.nameEn || '';
+              if(document.getElementById('adm-image')) document.getElementById('adm-image').value = d.image || '';
+              if(document.getElementById('adm-date')) document.getElementById('adm-date').value = d.date || '';
+              if(document.getElementById('adm-time')) document.getElementById('adm-time').value = d.time || '';
+              if(document.getElementById('adm-location')) document.getElementById('adm-location').value = d.location || '';
+              
+              if(document.getElementById('adm-desc-fi')) {
+                document.getElementById('adm-desc-fi').value = d.descFi || '';
+                adjustHeight(document.getElementById('adm-desc-fi'));
+              }
+              if(document.getElementById('adm-desc-en')) {
+                document.getElementById('adm-desc-en').value = d.descEn || '';
+                adjustHeight(document.getElementById('adm-desc-en'));
+              }
+              
+              if(document.getElementById('adm-ad1-title')) document.getElementById('adm-ad1-title').value = d.ad1Title || '';
+              if(document.getElementById('adm-ad1')) document.getElementById('adm-ad1').value = d.ad1 || '';
+              if(document.getElementById('adm-ad1-link')) document.getElementById('adm-ad1-link').value = d.ad1Link || '';
+              if(d.ad1 && delAd1Btn) { delAd1Btn.classList.remove('hidden'); } else if(delAd1Btn) { delAd1Btn.classList.add('hidden'); }
+
+              if(document.getElementById('adm-ad2-title')) document.getElementById('adm-ad2-title').value = d.ad2Title || '';
+              if(document.getElementById('adm-ad2')) document.getElementById('adm-ad2').value = d.ad2 || '';
+              if(document.getElementById('adm-ad2-link')) document.getElementById('adm-ad2-link').value = d.ad2Link || '';
+              if(d.ad2 && delAd2Btn) { delAd2Btn.classList.remove('hidden'); } else if(delAd2Btn) { delAd2Btn.classList.add('hidden'); }
+            } else {
+              if (delBtn) delBtn.classList.add('hidden');
+            }
+          });
+
+          haeOdottavatPyyntojat();
+          setupAdminTarkkuusWall();
+        }
+
+        function autoResizeTextarea(e) { adjustHeight(e.target); }
+        function adjustHeight(element) {
+          element.style.height = 'auto';
+          element.style.height = element.scrollHeight + 'px';
+        }
+
+        function lueKuvaBase64(fileInput, urlInputId, callback) {
+          if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) { callback(e.target.result); };
+            reader.readAsDataURL(fileInput.files[0]);
+          } else {
+            callback(document.getElementById(urlInputId).value.trim());
+          }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const setupFileListener = (fileId, textId) => {
+            const fileIn = document.getElementById(fileId);
+            if(fileIn) {
+              fileIn.addEventListener('change', function() {
+                if(this.files && this.files[0]) {
+                  document.getElementById(textId).value = `Ladattu tiedosto: ${this.files[0].name}`;
+                }
+              });
+            }
+          };
+          setupFileListener('adm-image-file', 'adm-image');
+          setupFileListener('adm-ad1-file', 'adm-ad1');
+          setupFileListener('adm-ad2-file', 'adm-ad2');
+        });
+
+        if (document.getElementById('adm-publish-btn')) {
+          document.getElementById('adm-publish-btn').addEventListener('click', () => {
+            const fileInput = document.getElementById('adm-image-file');
+            lueKuvaBase64(fileInput, 'adm-image', (kuvaData) => {
+              db.collection("tournaments").doc("active").set({
+                nameFi: document.getElementById('adm-name-fi').value.trim(),
+                nameEn: document.getElementById('adm-name-en').value.trim(),
+                image: kuvaData || "https://via.placeholder.com/600x300",
+                date: document.getElementById('adm-date').value,
+                time: document.getElementById('adm-time').value,
+                location: document.getElementById('adm-location').value.trim(),
+                descFi: document.getElementById('adm-desc-fi').value.trim(),
+                descEn: document.getElementById('adm-desc-en').value.trim(),
+                status: "active",
+                published: true
+              }, { merge: true }).then(() => {
+                alustaTyhjatLohkot();
+                alert("Turnaus luotu/päivitetty!");
+              });
+            });
+          });
+        }
+
+        if (document.getElementById('adm-save-ad1-btn')) {
+          document.getElementById('adm-save-ad1-btn').addEventListener('click', () => {
+            const fileInput = document.getElementById('adm-ad1-file');
+            lueKuvaBase64(fileInput, 'adm-ad1', (kuvaData) => {
+              db.collection("tournaments").doc("active").set({
+                ad1Title: document.getElementById('adm-ad1-title').value.trim(),
+                ad1: kuvaData,
+                ad1Link: document.getElementById('adm-ad1-link').value.trim()
+              }, { merge: true }).then(() => alert("Mainos 1 tallennettu!"));
+            });
+          });
+        }
+
+        if (document.getElementById('adm-del-ad1-btn')) {
+          document.getElementById('adm-del-ad1-btn').addEventListener('click', () => {
+            if(confirm("Haluatko poistaa Mainoksen 1?")) {
+              db.collection("tournaments").doc("active").set({
+                ad1Title: "", ad1: "", ad1Link: ""
+              }, { merge: true }).then(() => {
+                document.getElementById('adm-ad1-title').value = '';
+                document.getElementById('adm-ad1').value = '';
+                document.getElementById('adm-ad1-link').value = '';
+                document.getElementById('adm-ad1-file').value = '';
+                alert("Mainos 1 poistettu!");
+              });
+            }
+          });
+        }
+
+        if (document.getElementById('adm-save-ad2-btn')) {
+          document.getElementById('adm-save-ad2-btn').addEventListener('click', () => {
+            const fileInput = document.getElementById('adm-ad2-file');
+            lueKuvaBase64(fileInput, 'adm-ad2', (kuvaData) => {
+              db.collection("tournaments").doc("active").set({
+                ad2Title: document.getElementById('adm-ad2-title').value.trim(),
+                ad2: kuvaData,
+                ad2Link: document.getElementById('adm-ad2-link').value.trim()
+              }, { merge: true }).then(() => alert("Mainos 2 Tallennettu!"));
+            });
+          });
+        }
+
+        if (document.getElementById('adm-del-ad2-btn')) {
+          document.getElementById('adm-del-ad2-btn').addEventListener('click', () => {
+            if(confirm("Haluatko poistaa Mainoksen 2?")) {
+              db.collection("tournaments").doc("active").set({
+                ad2Title: "", ad2: "", ad2Link: ""
+              }, { merge: true }).then(() => {
+                document.getElementById('adm-ad2-title').value = '';
+                document.getElementById('adm-ad2').value = '';
+                document.getElementById('adm-ad2-link').value = '';
+                document.getElementById('adm-ad2-file').value = '';
+                alert("Mainos 2 poistettu!");
+              });
+            }
+          });
+        }
+
+        function alustaTyhjatLohkot() {
+          const lohkot = ["K1", "K2", "H1", "H2", "F1", "FP1", "FP2", "FP3", "FP4"];
+          lohkot.forEach(lId => {
+            const docRef = db.collection("tournaments").doc("active").collection("lohkot").doc(lId);
+            docRef.get().then(doc => { if (!doc.exists) { docRef.set({ pelaajat: [] }); } });
+          });
+        }
+
+        if (document.getElementById('adm-del-btn')) {
+          document.getElementById('adm-del-btn').addEventListener('click', () => {
+            if (confirm("Haluatko varmasti poistaa turnauksen?")) {
+              db.collection("tournaments").doc("active").delete().then(() => {
+                alert("Turnaus poistettu.");
+                window.location.reload();
+              });
+            }
+          });
+        }
+
+        function haeOdottavatPyyntojat() {
+          db.collection("tournaments").doc("active").collection("participants").where("status", "==", "pending").onSnapshot(snap => {
+            const tbody = document.querySelector('#adm-req-table tbody');
+            if (!tbody) return; tbody.innerHTML = '';
+            snap.forEach(doc => {
+              const d = doc.data();
+              let singeliTeksti = "Ei";
+              if (d.singles === "kyllä" || d.singles === "Kyllä") {
+                singeliTeksti = `Kyllä (<span class="badge">${(d.pClass || 'HUPI').toUpperCase()}</span>)`;
+              }
+              let neluriTeksti = d.doubles === "kyllä" || d.doubles === "Kyllä" ? "Kyllä 🏸" : "Ei";
+              tbody.innerHTML += `
+                <tr>
+                  <td style="font-weight: 600;">${d.name}</td>
+                  <td>${singeliTeksti}</td>
+                  <td>${neluriTeksti}</td>
+                  <td>
+                    <button onclick="pAsetaStatus('${doc.id}','approved')" class="btn btn-primary" style="padding:6px 10px; background:#2ecc71;">Hyväksy</button>
+                    <button onclick="pAsetaStatus('${doc.id}','rejected')" class="btn btn-secondary" style="padding:6px 10px; background:#e74c3c;">Hylkää</button>
+                  </td>
+                </tr>
+              `;
+            });
+          });
+        }
+
+        window.pAsetaStatus = function(uid, tila) {
+          const pRef = db.collection("tournaments").doc("active").collection("participants").doc(uid);
+          if (tila === 'approved') {
+            pRef.get().then(docSnapshot => {
+              if (docSnapshot.exists) {
+                const pData = docSnapshot.data();
+                pRef.update({ status: 'approved' }).then(() => sijoitaPelaajaAutomaattisesti(pData));
+              }
+            });
+          } else {
+            pRef.update({ status: tila }).then(() => alert("Tila päivitetty: " + tila));
+          }
+        }
+
+        function sijoitaPelaajaAutomaattisesti(pelaaja) {
+          if (pelaaja.singles === "kyllä" || pelaaja.singles === "Kyllä") {
+            if (pelaaja.pClass === "kilpa") {
+              lisaaTasapainotettuPelaaja(["K1", "K2"], pelaaja.name);
+            } else if (pelaaja.pClass === "harraste") {
+              lisaaTasapainotettuPelaaja(["H1", "H2"], pelaaja.name);
+            } else {
+              lisaaPelaajaLohkoon("F1", pelaaja.name);
+            }
+          }
+
+          if (pelaaja.doubles === "kyllä" || pelaaja.doubles === "Kyllä") {
+            lisaaTasapainotettuPelaaja(["FP1", "FP2", "FP3", "FP4"], pelaaja.name + " / ?"); 
+          }
+        }
+
+        function lisaaTasapainotettuPelaaja(lohkoLista, nimi) {
+          let hakuLupaukset = lohkoLista.map(lId => db.collection("tournaments").doc("active").collection("lohkot").doc(lId).get());
+          Promise.all(hakuLupaukset).then(snapshots => {
+            let valittuLohkoId = lohkoLista[0];
+            let pieninMaara = Infinity;
+
+            snapshots.forEach((snap, index) => {
+              let pLista = snap.exists && snap.data().pelaajat ? snap.data().pelaajat : [];
+              if (pLista.length < pieninMaara) {
+                pieninMaara = pLista.length;
+                valittuLohkoId = lohkoLista[index];
+              }
+            });
+
+            lisaaPelaajaLohkoon(valittuLohkoId, nimi);
+          });
+        }
+
+        function lisaaPelaajaLohkoon(lohkoId, nimi) {
+          const lRef = db.collection("tournaments").doc("active").collection("lohkot").doc(lohkoId);
+          db.runTransaction(transaction => {
+            return transaction.get(lRef).then(lDoc => {
+              let lista = lDoc.exists && lDoc.data().pelaajat ? lDoc.data().pelaajat : [];
+              if (!lista.includes(nimi)) { lista.push(nimi); }
+              transaction.set(lRef, { pelaajat: lista }, { merge: true });
+            });
+          }).then(() => alert(`${nimi} lisätty automaattisesti lohkoon: ${lohkoId}`))
+            .catch(err => console.log("Lohkosijoitusvirhe: ", err));
+        }
+
+        /*******************************************************************************
+         * 8. TURNAUSSIVU & LIVE-KAAVIOT
+         *******************************************************************************/
+        let aktiivinenTabi = "K1";
+
+        const KAIKKI_TABIT = [
+          { id: "K1", nimi: "Kilpa L1" },
+          { id: "K2", nimi: "Kilpa L2" },
+          { id: "H1", nimi: "Harraste L1" },
+          { id: "H2", nimi: "Harraste L2" },
+          { id: "F1", nimi: "Hupi L1" },
+          { id: "FP1", nimi: "4PLAY L1" },
+          { id: "FP2", nimi: "4PLAY L2" },
+          { id: "FP3", nimi: "4PLAY L3" },
+          { id: "FP4", nimi: "4PLAY L4" }
+        ];
+
+        function initTournamentPage() {
+          const adminPanel = document.getElementById('tournament-admin-panel');
+          if (currentUser && currentUser.role === 'admin') {
+            if (adminPanel) adminPanel.classList.remove('hidden');
+          } else {
+            if (adminPanel) adminPanel.classList.add('hidden');
+          }
+
+          rakennaTabNavigation();
+
+          db.collection("tournaments").doc("active").get().then(doc => {
+            if (doc.exists && doc.data().status === "active") {
+              lataaTurnausSisalto();
+            } else {
+              naytaOdotustilaViesti();
+            }
+          }).catch(err => {
+            console.error("Virhe turnauksen tilan tarkistuksessa:", err);
+            document.getElementById('tournament-page-content').innerText = "Virhe ladattaessa turnaustietoja.";
+          });
+        }
+
+        function rakennaTabNavigation() {
+          const navContainer = document.querySelector('.tab-navigation');
+          if (!navContainer) return;
+
+          navContainer.innerHTML = "";
+          KAIKKI_TABIT.forEach(tabi => {
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${tabi.id === aktiivinenTabi ? 'active' : ''}`;
+            btn.innerText = tabi.nimi;
+            btn.onclick = () => {
+              document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+              aktiivinenTabi = tabi.id;
+              
+              db.collection("tournaments").doc("active").get().then(doc => {
+                if (doc.exists && doc.data().status === "active") {
+                  lataaTurnausSisalto();
+                } else {
+                  naytaOdotustilaViesti();
+                }
+              });
+            };
+            navContainer.appendChild(btn);
+          });
+        }
+
+        function naytaOdotustilaViesti() {
+          const content = document.getElementById('tournament-page-content');
+          if (!content) return;
+
+          content.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px;">
+              <h2 style="margin-bottom: 10px; color: var(--text-color);">Kaaviot valmiina 🕒</h2>
+              <p style="color: var(--text-muted); line-height:1.6;">Järjestäjä ei ole vielä virallisesti aloittanut turnausta. Pelaajien hyväksyntä ja ottelukaaviot päivittyvät tähän heti, kun turnaus käynnistetään Admin-paneelista.</p>
+            </div>
+          `;
+        }
+
+        function lataaTurnausSisalto() {
+          const content = document.getElementById('tournament-page-content');
+          if (!content) return;
+
+          content.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:10px 0;">Ladataan lohkon <b>${aktiivinenTabi}</b> reaaliaikaisia tuloksia...</p>`;
+          
+          db.collection("tournaments").doc("active").collection("lohkot").doc(aktiivinenTabi).get().then(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              const pelaajat = data.pelaajat || [];
+              if(pelaajat.length === 0) {
+                content.innerHTML = `<p style="text-align:center; color:var(--text-muted);">Lohkossa ei ole vielä pelaajia.</p>`;
+                return;
+              }
+
+              let html = `<h3 style="color:var(--primary-color); margin-bottom:15px;">Lohkon tilanne</h3>`;
+              html += `<table class="tournament-table"><thead><tr><th>Pelaaja</th><th>Ottelut</th><th>Pisteet</th></tr></thead><tbody>`;
+              
+              pelaajat.forEach(p => {
+                html += `<tr><td><strong>${p}</strong></td><td>0</td><td>0</td></tr>`;
+              });
+              
+              html += `</tbody></table>`;
+              content.innerHTML = html;
+            } else {
+              content.innerHTML = `<p>Lohkossa ${aktiivinenTabi} ei ole vielä pelaajia tai otteluita.</p>`;
+            }
+          });
+        }
+
+        /*******************************************************************************
+         * 9. ASETUKSET SIVU
+         *******************************************************************************/
+        function initAsetuksetPage() {
+          const darkToggle = document.getElementById('darkmode-toggle');
+          const emailToggle = document.getElementById('email-notif-toggle');
+          
+          if (!currentUser) return;
+
+          if (darkToggle) darkToggle.checked = (currentUser.theme === 'dark');
+          if (emailToggle) emailToggle.checked = (currentUser.emailNotification === true);
+
+          tarkistaTurnausOsallistuminen();
+        }
+
+        function tarkistaTurnausOsallistuminen() {
+          const quitZone = document.getElementById('quit-tournament-zone');
+          const quitBtn = document.getElementById('quit-tournament-btn');
+
+          if (!quitZone || !currentUser) return;
+
+          db.collection("tournaments").doc("active").collection("participants").doc(currentUser.uid).onSnapshot(doc => {
+            if (doc.exists && doc.data().status === 'approved') {
+              quitZone.classList.remove('hidden');
+            } else {
+              quitZone.classList.add('hidden');
+            }
+          });
+
+          if (quitBtn && !quitBtn.dataset.listenerAttached) {
+            quitBtn.dataset.listenerAttached = "true";
+            quitBtn.addEventListener('click', () => {
+              if (confirm("Haluatko varmasti peruuttaa osallistumisesi turnaukseen? Nimesi poistetaan kaavioista.")) {
+                db.collection("tournaments").doc("active").collection("participants").doc(currentUser.uid).delete().then(() => {
+                  const lohkoIdt = ["K1", "K2", "H1", "H2", "F1", "FP1", "FP2", "FP3", "FP4"];
+                  
+                  lohkoIdt.forEach(lId => {
+                    const lRef = db.collection("tournaments").doc("active").collection("lohkot").doc(lId);
+                    db.runTransaction(transaction => {
+                      return transaction.get(lRef).then(lDoc => {
+                        if (lDoc.exists && lDoc.data().pelaajat) {
+                          let vanhatPelaajat = lDoc.data().pelaajat;
+                          let uudetPelaajat = vanhatPelaajat.filter(nimi => !nimi.includes(currentUser.firstname));
+                          transaction.update(lRef, { pelaajat: uudetPelaajat });
+                        }
+                      });
+                    }).catch(e => console.log("Lohkon siivousvirhe: ", e));
+                  });
+
+                  alert("Osallistuminen peruttu onnistuneesti.");
+                });
+              }
+            });
+          }
+        }
+
+        if (document.getElementById('save-settings-btn')) {
+          document.getElementById('save-settings-btn').addEventListener('click', () => {
+            if (!currentUser) { 
+              alert("Kirjaudu ensin sisään!"); 
+              return; 
+            }
+
+            const isDark = document.getElementById('darkmode-toggle').checked;
+            const wantEmail = document.getElementById('email-notif-toggle').checked;
+
+            db.collection("users").doc(currentUser.uid).update({
+              theme: isDark ? 'dark' : 'light',
+              emailNotification: wantEmail
+            }).then(() => {
+              if (isDark) { 
+                document.body.classList.add('dark-mode'); 
+              } else { 
+                document.body.classList.remove('dark-mode'); 
+              }
+              alert("Asetukset tallennettu onnistuneesti!");
+            }).catch(err => alert(err.message));
+          });
+        }
+
+        /*******************************************************************************
+         * 10. SMASH-PELI (UUSI TYYLIKÄS FYSIKKAOHJATTU VERSIO) & TARKKUUSSEINÄ LEADERBOARD
+         *******************************************************************************/
+        const container = document.getElementById('game-container');
+        const racket = document.getElementById('racket');
+        const scoreDisplay = document.getElementById('score');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const opponent = document.getElementById('opponent-container');
+        const startBtn = document.getElementById('start-game-btn');
+
+        let score = 0;
+        let isPlaying = false;
+        let balls = [];
+        let spawnInterval;
+        let gameLoopInterval;
+        let racketX = 170;
+        let speedMultiplier = 1;
+
+        // Estetään kosketusnäytöllä pelialueen turha vieritys ja pompinta
+        if (container) {
+          container.style.cursor = 'auto';
+
+          container.addEventListener('mousemove', (e) => {
+              if (!isPlaying) return;
+              const rect = container.getBoundingClientRect();
+              racketX = e.clientX - rect.left - 30; // 30 on puolet mailan leveydestä
+              updateRacketPosition();
+          });
+
+          container.addEventListener('touchmove', (e) => {
+              if (!isPlaying) return;
+              e.preventDefault(); // Estää ruudun rullauksen iOS:lla pelatessa
+              if (e.touches.length > 0) {
+                  const rect = container.getBoundingClientRect();
+                  racketX = e.touches[0].clientX - rect.left - 30;
+                  updateRacketPosition();
+              }
+          }, { passive: false });
+        }
+
+        function updateRacketPosition() {
+            if (racketX < 0) racketX = 0;
+            if (racketX > 340) racketX = 340; // 400 - 60 (mailan leveys)
+            if (racket) racket.style.left = racketX + 'px';
+        }
+
+        window.startGame = function() {
+            score = 0;
+            speedMultiplier = 1;
+            if (scoreDisplay) scoreDisplay.innerText = score;
+            isPlaying = true;
+            if (gameOverScreen) gameOverScreen.style.display = 'none';
+            
+            if (container) container.style.cursor = 'none'; // Piilotetaan hiiri pelin ajaksi
+            
+            // Siivotaan vanhat sulat
+            balls.forEach(ball => ball.element.remove());
+            balls = [];
+
+            // Aloitetaan päivityssilmukat
+            gameLoopInterval = setInterval(updateGame, 20);
+            spawnInterval = setInterval(spawnShuttlecock, 1200);
+        }
+
+        if (startBtn) {
+          startBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            startGame();
+          });
+        }
+
+        function stopActiveGame() {
+          isPlaying = false;
+          clearInterval(gameLoopInterval);
+          clearInterval(spawnInterval);
+          if (gameOverScreen) gameOverScreen.style.display = 'flex';
+          if (container) container.style.cursor = 'auto';
+          balls.forEach(ball => ball.element.remove());
+          balls = [];
+        }
+
+        function spawnShuttlecock() {
+            if (!isPlaying || !container || !opponent) return;
+
+            // Arvotaan sulalle tippumispaikka x-akselilla
+            const startX = Math.floor(Math.random() * 370); // 400 - 30px leveyttä
+            
+            // Liikutetaan vastustajahahmo sulan laukaisupisteeseen sulavasti
+            let opponentX = startX - 25; 
+            if (opponentX < 0) opponentX = 0;
+            if (opponentX > 320) opponentX = 320;
+            opponent.style.left = opponentX + 'px';
+
+            const ballElement = document.createElement('div');
+            ballElement.classList.add('shuttlecock');
+            
+            const isGold = Math.random() < 0.15;
+            ballElement.classList.add(isGold ? 'gold-sula' : 'normal-sula');
+
+            // Dynaamiset neon-sulkapallot inline SVG-koodilla (varmistaa toiminnan aina)
+            const sulaColor = isGold ? '#f1c40f' : '#ffffff';
+            const shadowColor = isGold ? 'rgba(241, 196, 15, 0.8)' : 'rgba(255,255,255,0.8)';
+            ballElement.innerHTML = `
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2 L6 12 L18 12 Z M6 13 L3 20 L21 20 L18 13 Z" fill="${sulaColor}" stroke="#110c22" stroke-width="1" filter="drop-shadow(0 0 3px ${shadowColor})"/>
+              </svg>
+            `;
+
+            ballElement.style.left = startX + 'px';
+            ballElement.style.top = '100px'; // Lähtee vastustajahahmon alta
+            container.appendChild(ballElement);
+
+            balls.push({
+                element: ballElement,
+                x: startX,
+                y: 100,
+                speed: (Math.random() * 1.8 + 2.2) * speedMultiplier,
+                isGold: isGold
+            });
+
+            // Vaikeutetaan peliä säännöllisesti
+            if (score > 0 && score % 60 === 0) {
+                speedMultiplier += 0.08;
+            }
+        }
+
+        function updateGame() {
+            for (let i = balls.length - 1; i >= 0; i--) {
+                let ball = balls[i];
+                ball.y += ball.speed;
+                ball.element.style.top = ball.y + 'px';
+
+                // Mailaan osumisen tarkistus (Y-akselilla racketin korkeus on 440px - 455px)
+                if (ball.y >= 438 && ball.y <= 454) {
+                    if (ball.x + 28 >= racketX && ball.x <= racketX + 60) {
+                        // Maila välähtää vihreänä osumasta
+                        if (racket) {
+                          racket.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+                          racket.style.boxShadow = '0 0 15px #2ecc71';
+                          setTimeout(() => {
+                              if (racket) {
+                                racket.style.background = 'linear-gradient(to right, var(--primary-color), #ff007f)';
+                                racket.style.boxShadow = '0 0 12px var(--primary-color)';
+                              }
+                          }, 120);
+                        }
+
+                        score += ball.isGold ? 25 : 10;
+                        if (scoreDisplay) scoreDisplay.innerText = score;
+
+                        ball.element.remove();
+                        balls.splice(i, 1);
+                        continue;
+                    }
+                }
+
+                // Jos sulka putoaa lattiaan, peli päättyy välittömästi
+                if (ball.y > 500) {
+                    endGame();
+                    break;
+                }
+            }
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(gameLoopInterval);
+            clearInterval(spawnInterval);
+            if (finalScoreDisplay) finalScoreDisplay.innerText = "LöScaba-pisteesi: " + score;
+            if (gameOverScreen) gameOverScreen.style.display = 'flex';
+            
+            if (container) container.style.cursor = 'auto'; // Palautetaan hiiri
+        }
+
+        /* VÄLILEHTIEN OHJAUS PELISIVULLA */
+        const tabSmashBtn = document.getElementById('tab-smash-btn');
+        const tabAccuracyBtn = document.getElementById('tab-accuracy-btn');
+        const smashContent = document.getElementById('smash-game-content');
+        const accuracyContent = document.getElementById('accuracy-wall-content');
+
+        if (tabSmashBtn && tabAccuracyBtn) {
+            tabSmashBtn.addEventListener('click', () => {
+                tabSmashBtn.classList.add('active');
+                tabAccuracyBtn.classList.remove('active');
+                tabSmashBtn.style.borderBottom = "3px solid var(--primary-color)";
+                tabAccuracyBtn.style.borderBottom = "none";
+                tabSmashBtn.style.color = "var(--text-color)";
+                tabAccuracyBtn.style.color = "var(--text-muted)";
+                smashContent.classList.remove('hidden');
+                accuracyContent.classList.add('hidden');
+            });
+
+            tabAccuracyBtn.addEventListener('click', () => {
+                tabAccuracyBtn.classList.add('active');
+                tabSmashBtn.classList.remove('active');
+                tabAccuracyBtn.style.borderBottom = "3px solid var(--primary-color)";
+                tabSmashBtn.style.borderBottom = "none";
+                tabAccuracyBtn.style.color = "var(--text-color)";
+                tabSmashBtn.style.color = "var(--text-muted)";
+                accuracyContent.classList.remove('hidden');
+                smashContent.classList.add('hidden');
+                stopActiveGame(); // Pysäytetään digitaalinen peli, jos siirrytään live-taulukkoon
+            });
+        }
+
+        /*******************************************************************************
+         * 11. LIVE TARKKUUSSEINÄ FIRESTORE-YHTEYS JA LEADERBOARD
+         *******************************************************************************/
+        function setupAdminTarkkuusWall() {
+            // Ladataan hyväksytyt pelaajat adminin alasvetovalikkoon
+            db.collection("tournaments").doc("active").collection("participants")
+              .where("status", "==", "approved")
+              .onSnapshot(snapshot => {
+                  const select = document.getElementById('adm-tarkkuus-player');
+                  if (!select) return;
+                  select.innerHTML = '<option value="">-- Valitse hyväksytty osallistuja --</option>';
+                  snapshot.forEach(doc => {
+                      const data = doc.data();
+                      select.innerHTML += `<option value="${data.name}">${data.name}</option>`;
+                  });
+              }, err => console.error("Virhe ladattaessa osallistujia admin-valikkoon: ", err));
+
+            // Admin tallennustoiminto (Rule 1 mukainen tallennuspolku)
+            const saveBtn = document.getElementById('adm-save-tarkkuus-btn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                    const playerSelect = document.getElementById('adm-tarkkuus-player').value;
+                    const customName = document.getElementById('adm-tarkkuus-custom').value.trim();
+                    const scoreInput = document.getElementById('adm-tarkkuus-score').value.trim();
+
+                    const finalName = customName || playerSelect;
+                    if (!finalName) {
+                        alert("Valitse pelaaja tai syötä vapaa nimi!");
+                        return;
+                    }
+                    if (!scoreInput || isNaN(scoreInput)) {
+                        alert("Syötä kelvollinen pistemäärä!");
+                        return;
+                    }
+
+                    // Tallenna polkuun: /artifacts/{appId}/public/data/tarkkuusseina
+                    db.collection("artifacts").doc(appId)
+                      .collection("public").doc("data")
+                      .collection("tarkkuusseina")
+                      .add({
+                          playerName: finalName,
+                          score: parseInt(scoreInput),
+                          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                      })
+                      .then(() => {
+                          alert("Tulos tallennettu live-leaderboardille! 🎯");
+                          document.getElementById('adm-tarkkuus-custom').value = '';
+                          document.getElementById('adm-tarkkuus-score').value = '';
+                      })
+                      .catch(err => {
+                          console.error("Virhe tuloksen tallennuksessa: ", err);
+                          alert("Tallennus epäonnistui. Varmista, että olet kirjautunut sisään.");
+                      });
+                });
+            }
+        }
+
+        // Live-tilausten haku ja näyttäminen (Kaikille käyttäjille avoin leaderboard)
+        db.collection("artifacts").doc(appId)
+          .collection("public").doc("data")
+          .collection("tarkkuusseina")
+          .onSnapshot(snapshot => {
+              let tulokset = [];
+              snapshot.forEach(doc => {
+                  const d = doc.data();
+                  tulokset.push({
+                      id: doc.id,
+                      playerName: d.playerName || "Nimetön",
+                      score: d.score || 0,
+                      timestamp: d.timestamp ? d.timestamp.toDate() : new Date()
+                  });
+              });
+
+              // Järjestetään tulokset parhaasta alkaen (Rule 2: ei compound-kyselyitä Firestoreen, järjestetään muistissa)
+              tulokset.sort((a, b) => b.score - a.score);
+
+              // Renderöidään yleinen tulostaulukko
+              const leaderboardBody = document.getElementById('tarkkuus-leaderboard-body');
+              if (leaderboardBody) {
+                  if (tulokset.length === 0) {
+                      leaderboardBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 30px 0;">Ei vielä kirjattuja heittoja. Ole ensimmäinen! 🎯</td></tr>`;
+                  } else {
+                      leaderboardBody.innerHTML = '';
+                      tulokset.forEach((t, index) => {
+                          let sijaEmoji = "";
+                          if (index === 0) sijaEmoji = "🥇 ";
+                          else if (index === 1) sijaEmoji = "🥈 ";
+                          else if (index === 2) sijaEmoji = "🥉 ";
+
+                          leaderboardBody.innerHTML += `
+                              <tr>
+                                  <td style="text-align: center; font-weight: bold; color: ${index < 3 ? 'var(--primary-color)' : 'var(--text-color)'}">${sijaEmoji || (index + 1)}</td>
+                                  <td style="font-weight: 600;">${t.playerName}</td>
+                                  <td style="text-align: right; font-weight: bold; color: var(--success-color); font-size: 1.1rem;">${t.score}p</td>
+                              </tr>
+                          `;
+                      });
+                  }
+              }
+
+              // Renderöidään poistolista admin-sivulle (jos käyttäjä on admin)
+              const adminTbody = document.getElementById('adm-tarkkuus-list-body');
+              if (adminTbody) {
+                  adminTbody.innerHTML = '';
+                  tulokset.forEach((t, index) => {
+                      const aikaStr = t.timestamp.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+                      adminTbody.innerHTML += `
+                          <tr>
+                              <td style="font-weight: bold;">${index + 1}</td>
+                              <td style="font-weight: 600;">${t.playerName}</td>
+                              <td style="font-weight: bold; color: var(--success-color);">${t.score}</td>
+                              <td style="font-size: 13px; color: var(--text-muted);">${aikaStr}</td>
+                              <td>
+                                  <button onclick="poistaTarkkuusTulos('${t.id}')" class="btn" style="background: var(--danger-color); padding: 5px 10px; font-size: 12px; font-weight: bold; box-shadow: none;">Poista</button>
+                              </td>
+                          </tr>
+                      `;
+                  });
+              }
+          }, err => {
+              console.error("Virhe haettaessa Live-tarkkuusseinän tietoja: ", err);
+          });
+
+        // Tuloksen poistaminen (Vain adminit pystyvät suorittamaan)
+        window.poistaTarkkuusTulos = function(docId) {
+            if (confirm("Haluatko varmasti poistaa tämän tuloksen live-taulukosta?")) {
+                db.collection("artifacts").doc(appId)
+                  .collection("public").doc("data")
+                  .collection("tarkkuusseina")
+                  .doc(docId)
+                  .delete()
+                  .then(() => alert("Tulos poistettu live-taulukosta! ✓"))
+                  .catch(err => alert("Poisto epäonnistui: " + err.message));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(() => {
+            initTournamentPage();
+          }, 300);
+        });
+    </script>
+</body>
+</html>
